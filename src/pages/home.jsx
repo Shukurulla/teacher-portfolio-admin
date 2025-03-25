@@ -232,11 +232,11 @@ const AdminFilesPage = () => {
             {modalType === "tasdiqlash" && (
               <div className="p-6">
                 <h3 className="text-xl font-bold text-gray-800 mb-4">
-                  Topshiriqni Tasdiqlash
+                  Yutuqni Tasdiqlash
                 </h3>
                 <p className="text-gray-600 mb-6">
                   {selectedFile.from.firstName} {selectedFile.from.lastName}
-                  ning topshiriqni tasdiqlamoqchimisiz?
+                  ning yutugini tasdiqlamoqchimisiz?
                 </p>
                 <div className="flex justify-end space-x-3">
                   <button
@@ -260,7 +260,7 @@ const AdminFilesPage = () => {
             {modalType === "rad etish" && (
               <div className="p-6">
                 <h3 className="text-xl font-bold text-gray-800 mb-4">
-                  Topshiriqni Rad Etish
+                  Yutuqni Rad Etish
                 </h3>
 
                 <div className="flex justify-end space-x-3">
@@ -281,46 +281,12 @@ const AdminFilesPage = () => {
               </div>
             )}
 
-            {/* Fikr qoldirish modali */}
-            {modalType === "fikr" && (
-              <div className="p-6">
-                <h3 className="text-xl font-bold text-gray-800 mb-4">
-                  Fikr Qoldirish
-                </h3>
-                <textarea
-                  value={feedbackMessage}
-                  onChange={(e) => setFeedbackMessage(e.target.value)}
-                  className="w-full border border-gray-300 rounded-lg p-3 mb-4 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                  rows="3"
-                  placeholder="Fikringizni yozing..."
-                />
-                <div className="flex justify-end space-x-3">
-                  <button
-                    onClick={closeModal}
-                    className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition"
-                  >
-                    Bekor qilish
-                  </button>
-                  <button
-                    onClick={() => {
-                      handleResultMessage(selectedFile._id, feedbackMessage);
-                      closeModal();
-                    }}
-                    className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition flex items-center"
-                  >
-                    <FiMessageSquare className="mr-2" />
-                    Saqlash
-                  </button>
-                </div>
-              </div>
-            )}
-
             {/* Faylni ko'rish modali */}
             {modalType === "koʻrish" && selectedFile && (
               <div className="p-6">
                 <div className="flex justify-between items-center mb-6">
                   <h3 className="text-xl font-bold text-gray-800">
-                    {selectedFile.from.firstName}ning topshirig'i
+                    {selectedFile.from.firstName}ning yutugi
                   </h3>
                   <button
                     onClick={closeModal}
