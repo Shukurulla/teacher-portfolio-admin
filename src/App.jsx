@@ -31,7 +31,7 @@ const App = () => {
           element={<Layout activePage={<TeachersSystemPage />} />}
         />
         <Route
-          path="/teachers/:teacherId"
+          path="/teacher/:id"
           element={<Layout activePage={<TeacherProfilePage />} />}
         />
         <Route path="/login" element={<Login />} />
