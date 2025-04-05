@@ -1,43 +1,58 @@
-import React, { useEffect } from "react";
-import { Route, Routes, useNavigate } from "react-router-dom";
-import Layout from "./pages/layout";
-import Home from "./pages/home";
-import { useDispatch } from "react-redux";
-import AdminService from "./service/admin.service";
-import Login from "./pages/login";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-import TeachersSystemPage from "./pages/teachers";
-import TeacherProfilePage from "./pages/teacher-profile";
-const App = () => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  useEffect(() => {
-    const token = localStorage.getItem("teacher-admin");
-    if (!token) {
-      console.log(token);
+import { Provider } from "react-redux";
+import { store } from "./store";
 
-      return navigate("/login");
-    }
-    AdminService.getAdminByToken(dispatch);
-  }, []);
+// Layouts
+import AdminLayout from "./layout/AdminLayout";
 
+// Pages
+import Login from "./pages/Login";
+import Dashboard from "./pages/Dashboard";
+import TeacherList from "./pages/TeacherList";
+import TeacherDetail from "./pages/TeacherDetail";
+import JobDetail from "./pages/JobDetail";
+import FileDetail from "./pages/FileDetail";
+import NotFound from "./pages/NotFound";
+import ProtectedRoute from "./components/ProtectedRoute";
+import NewAchievementsPage from "./pages/NewAchievmentPage";
+import ApprovedFilesPage from "./pages/ApprovedFiles.page";
+import RejectedFilesPage from "./pages/RejectedFiles.page";
+
+function App() {
   return (
-    <div>
-      <Toaster />
-      <Routes>
-        <Route path="/" element={<Layout activePage={<Home />} />} />
-        <Route
-          path="/teachers"
-          element={<Layout activePage={<TeachersSystemPage />} />}
-        />
-        <Route
-          path="/teacher/:id"
-          element={<Layout activePage={<TeacherProfilePage />} />}
-        />
-        <Route path="/login" element={<Login />} />
-      </Routes>
-    </div>
+    <Provider store={store}>
+      <Router>
+        <Toaster position="top-right" />
+        <Routes>
+          <Route path="/login" element={<Login />} />
+
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <AdminLayout />
+              </ProtectedRoute>
+            }
+          >
+            <Route index element={<Dashboard />} />
+            <Route path="teachers" element={<TeacherList />} />
+            <Route path="teachers/:id" element={<TeacherDetail />} />
+            <Route
+              path="teachers/:teacherId/jobs/:jobId"
+              element={<JobDetail />}
+            />
+            <Route path="files/:fileId" element={<FileDetail />} />
+            <Route path="/new-files" element={<NewAchievementsPage />} />
+            <Route path="/approved" element={<ApprovedFilesPage />} />
+            <Route path="/rejected" element={<RejectedFilesPage />} />
+          </Route>
+
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Router>
+    </Provider>
   );
-};
+}
 
 export default App;
