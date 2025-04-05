@@ -5,19 +5,18 @@ import { store } from "./store";
 
 // Layouts
 import AdminLayout from "./layout/AdminLayout";
+import {
+  ApprovedFilesPage,
+  Dashboard,
+  FileDetail,
+  JobDetail,
+  NewAchievementsPage,
+  NotFound,
+  TeacherList,
+  TeacterDetail,
+} from "./pages";
 
 // Pages
-import Login from "./pages/login.jsx";
-import Dashboard from "./pages/dashboard.jsx";
-import TeacherList from "./pages/teacherList.jsx";
-import TeacherDetail from "./pages/teacherDetail.jsx";
-import JobDetail from "./pages/jobDetail.jsx";
-import FileDetail from "./pages/fileDetail.jsx";
-import NotFound from "./pages/notFound.jsx";
-import ProtectedRoute from "./components/ProtectedRoute.jsx";
-import NewAchievementsPage from "./pages/newAchievmentPage.jsx";
-import ApprovedFilesPage from "./pages/approvedFiles.page.jsx";
-import RejectedFilesPage from "./pages/rejectedFiles.page.jsx";
 
 function App() {
   return (
@@ -37,7 +36,7 @@ function App() {
           >
             <Route index element={<Dashboard />} />
             <Route path="teachers" element={<TeacherList />} />
-            <Route path="teachers/:id" element={<TeacherDetail />} />
+            <Route path="teachers/:id" element={<TeacterDetail />} />
             <Route
               path="teachers/:teacherId/jobs/:jobId"
               element={<JobDetail />}
