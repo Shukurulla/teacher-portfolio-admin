@@ -7,17 +7,17 @@ import { store } from "./store";
 import AdminLayout from "./layout/AdminLayout";
 
 // Pages
-import Login from "./pages/Login";
-import Dashboard from "./pages/Dashboard";
-import TeacherList from "./pages/TeacherList";
-import TeacherDetail from "./pages/TeacherDetail";
-import JobDetail from "./pages/JobDetail";
-import FileDetail from "./pages/FileDetail";
-import NotFound from "./pages/NotFound";
-import ProtectedRoute from "./components/ProtectedRoute";
-import NewAchievementsPage from "./pages/NewAchievmentPage";
-import ApprovedFilesPage from "./pages/ApprovedFiles.page";
-import RejectedFilesPage from "./pages/RejectedFiles.page";
+import Login from "./pages/Login.jsx";
+import Dashboard from "./pages/Dashboard.jsx";
+import TeacherList from "./pages/TeacherList.jsx";
+import TeacherDetail from "./pages/TeacherDetail.jsx";
+import JobDetail from "./pages/JobDetail.jsx";
+import FileDetail from "./pages/FileDetail.jsx";
+import NotFound from "./pages/NotFound.jsx";
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
+import NewAchievementsPage from "./pages/NewAchievmentPage.jsx";
+import ApprovedFilesPage from "./pages/ApprovedFiles.page.jsx";
+import RejectedFilesPage from "./pages/RejectedFiles.page.jsx";
 
 function App() {
   return (
