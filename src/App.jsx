@@ -15,6 +15,7 @@ import {
   TeacherList,
   TeacterDetail,
 } from "./pages";
+import { ProtectedRoute } from "./components";
 
 // Pages
 

@@ -4,8 +4,7 @@ import { useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAdminProfile } from "../store/slices/authSlice";
-import Sidebar from "../components/Sidebar";
-import Header from "../components/Header";
+import { Header, Sidebar } from "../components";
 
 const AdminLayout = () => {
   const dispatch = useDispatch();
