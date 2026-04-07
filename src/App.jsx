@@ -10,8 +10,10 @@ import {
   Dashboard,
   FileDetail,
   JobDetail,
+  Login,
   NewAchievementsPage,
   NotFound,
+  RejectedFilesPage,
   TeacherList,
   TeacterDetail,
 } from "./pages";

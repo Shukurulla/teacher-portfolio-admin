@@ -4,5 +4,7 @@ export { default as JobDetail } from "./JobDetail";
 export { default as FileDetail } from "./FileDetail";
 export { default as NewAchievementsPage } from "./NewAchievmentPage";
 export { default as ApprovedFilesPage } from "./ApprovedFiles.page";
+export { default as RejectedFilesPage } from "./RejectedFiles.page";
+export { default as Login } from "./Login";
 export { default as NotFound } from "./NotFound";
 export { default as Dashboard } from "./Dashboard";
