@@ -87,81 +87,60 @@ const FileDetail = () => {
       });
   };
 
-  const renderFilePreview = () => {
-    if (!filePreview || !currentFile) return null;
+  const renderSingleFile = (file, idx) => {
+    const fileUrl = `https://server.portfolio-sport.uz${file.fileUrl}`;
+    const fileExtension = file.fileUrl?.split(".").pop()?.toLowerCase() || "";
 
-    const fileUrl = `https://server.portfolio-sport.uz${currentFile.fileUrl}`;
-    const fileType = filePreview.type || "";
-
-    // Extract file extension from filename
-    const fileExtension =
-      currentFile.fileName?.split(".").pop()?.toLowerCase() || "";
-
-    // Rasmlar uchun
+    let preview;
     if (["jpg", "jpeg", "png", "gif"].includes(fileExtension)) {
-      return (
-        <div className="flex justify-center">
-          <img
-            src={fileUrl || "/placeholder.svg"}
-            alt="Fayl ko'rinishi"
-            className="max-w-full max-h-[500px] object-contain"
-          />
-        </div>
+      preview = (
+        <img
+          src={fileUrl}
+          alt={file.fileTitle}
+          className="max-w-full max-h-[500px] object-contain"
+        />
       );
-    }
-
-    // PDF uchun
-    if (fileExtension === "pdf") {
-      return (
-        <div className="h-[600px]">
-          <iframe
-            src={fileUrl}
-            className="w-full h-full"
-            title="PDF Viewer"
-          ></iframe>
-        </div>
+    } else if (fileExtension === "pdf") {
+      preview = (
+        <iframe src={fileUrl} className="w-full h-[600px]" title={file.fileTitle} />
       );
-    }
-
-    // Video uchun
-    if (["mp4", "webm", "ogg"].includes(fileExtension)) {
-      return (
-        <div className="flex justify-center">
-          <video controls className="max-w-full max-h-[500px]">
-            <source src={fileUrl} type={`video/${fileExtension}`} />
-            Brauzeringiz video elementini qo'llab-quvvatlamaydi.
-          </video>
-        </div>
+    } else if (["mp4", "webm"].includes(fileExtension)) {
+      preview = (
+        <video controls className="max-w-full max-h-[500px]">
+          <source src={fileUrl} type={`video/${fileExtension}`} />
+        </video>
       );
-    }
-
-    // Audio uchun
-    if (["mp3", "wav", "ogg"].includes(fileExtension)) {
-      return (
-        <div className="flex justify-center">
-          <audio controls>
-            <source src={fileUrl} type={`audio/${fileExtension}`} />
-            Brauzeringiz audio elementini qo'llab-quvvatlamaydi.
-          </audio>
-        </div>
+    } else if (["mp3", "wav", "ogg"].includes(fileExtension)) {
+      preview = (
+        <audio controls>
+          <source src={fileUrl} type={`audio/${fileExtension}`} />
+        </audio>
       );
-    }
-
-    // Boshqa turdagi fayllar uchun
-    return (
-      <div className="text-center p-6 bg-gray-100 rounded-lg">
-        <p className="text-lg mb-4">
-          Bu turdagi faylni brauzerda ko'rib bo'lmaydi.
-        </p>
+    } else {
+      preview = (
         <a
           href={fileUrl}
           download
-          className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+          className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
         >
           Faylni yuklab olish
         </a>
+      );
+    }
+
+    return (
+      <div key={file._id || idx} className="mb-6 border-b pb-4 last:border-b-0">
+        <p className="text-sm font-medium text-gray-700 mb-2">
+          {file.fileTitle}
+        </p>
+        <div className="flex justify-center">{preview}</div>
       </div>
     );
+  };
+
+  const renderFilePreview = () => {
+    if (!currentFile?.files?.length) return null;
+    return currentFile.files.map(renderSingleFile);
   };
 
   if (loading && !currentFile) {
@@ -259,9 +238,14 @@ const FileDetail = () => {
                 </div>
 
                 <div>
-                  <h3 className="text-sm font-medium text-gray-500">Ball</h3>
+                  <h3 className="text-sm font-medium text-gray-500">
+                    Jami ball
+                  </h3>
                   <p className="mt-1 text-sm text-gray-900">
-                    {currentFile.achievments?.rating?.rating}
+                    {currentFile.files?.reduce(
+                      (sum, f) => sum + (f.rating?.rating || 0),
+                      0
+                    ) || "-"}
                   </p>
                 </div>
 
