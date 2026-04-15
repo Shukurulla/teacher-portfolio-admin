@@ -41,15 +41,19 @@ export const getFileById = async (id) => {
 // Fayl holatini yangilash (tasdiqlash/rad etish)
 export const updateFileStatus = async (id, data) => {
   try {
-    const response = await api.patch(`/files/${id}`, data);
+    const isApprove = data.status === "Tasdiqlandi";
+    const response = isApprove
+      ? await api.post(`/file/accept/${id}`, data)
+      : await api.patch(`/files/${id}`, data);
     toast.success(
-      data.status === "Tasdiqlandi"
-        ? "Fayl muvaffaqiyatli tasdiqlandi"
-        : "Fayl rad etildi"
+      isApprove ? "Fayl muvaffaqiyatli tasdiqlandi" : "Fayl rad etildi"
     );
     return response.data;
   } catch (error) {
-    toast.error("Fayl holatini yangilashda xatolik yuz berdi");
+    toast.error(
+      error.response?.data?.message ||
+        "Fayl holatini yangilashda xatolik yuz berdi"
+    );
     throw error;
   }
 };

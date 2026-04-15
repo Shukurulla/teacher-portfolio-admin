@@ -21,6 +21,7 @@ const FileDetail = () => {
     loading,
     error,
   } = useSelector((state) => state.files);
+  const { admin } = useSelector((state) => state.auth);
 
   const [resultMessage, setResultMessage] = useState("");
 
@@ -43,12 +44,17 @@ const FileDetail = () => {
   }, [currentFile]);
 
   const handleApprove = () => {
+    const ratings = currentFile?.files?.map(
+      () => currentFile.achievments?.ratings?.[0]
+    );
     dispatch(
       updateFile({
         id: fileId,
         data: {
           status: "Tasdiqlandi",
           resultMessage,
+          inspector: admin?._id,
+          ratings,
         },
       })
     )
@@ -74,6 +80,7 @@ const FileDetail = () => {
         data: {
           status: "Tasdiqlanmadi",
           resultMessage,
+          inspector: admin?._id,
         },
       })
     )
