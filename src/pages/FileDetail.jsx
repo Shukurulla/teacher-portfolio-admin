@@ -24,6 +24,7 @@ const FileDetail = () => {
   const { admin } = useSelector((state) => state.auth);
 
   const [resultMessage, setResultMessage] = useState("");
+  const [selectedRatings, setSelectedRatings] = useState([]);
 
   // Access the nested data property
   const currentFile = fileData?.data || null;
@@ -40,13 +41,23 @@ const FileDetail = () => {
   useEffect(() => {
     if (currentFile) {
       setResultMessage(currentFile.resultMessage || "");
+      setSelectedRatings((currentFile.files || []).map(() => ""));
     }
   }, [currentFile]);
 
   const handleApprove = () => {
-    const ratings = currentFile?.files?.map(
-      () => currentFile.achievments?.ratings?.[0]
-    );
+    const achRatings = currentFile?.achievments?.ratings || [];
+    if (
+      selectedRatings.length !== currentFile?.files?.length ||
+      selectedRatings.some((v) => v === "" || v == null)
+    ) {
+      toast.error("Har bir hujjat uchun toifani tanlang");
+      return;
+    }
+    const ratings = selectedRatings.map((ri) => {
+      const r = achRatings[Number(ri)];
+      return { about: r.about, rating: r.rating };
+    });
     dispatch(
       updateFile({
         id: fileId,
@@ -294,6 +305,35 @@ const FileDetail = () => {
               </div>
               <div className="p-6">
                 <div className="space-y-4">
+                  <div className="space-y-3">
+                    <h3 className="text-sm font-medium text-gray-700">
+                      Har bir hujjat uchun toifani tanlang
+                    </h3>
+                    {currentFile.files?.map((f, idx) => (
+                      <div key={f._id || idx}>
+                        <label className="block text-xs text-gray-500 mb-1">
+                          {f.fileTitle}
+                        </label>
+                        <select
+                          value={selectedRatings[idx] ?? ""}
+                          onChange={(e) => {
+                            const next = [...selectedRatings];
+                            next[idx] = e.target.value;
+                            setSelectedRatings(next);
+                          }}
+                          className="block w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-blue-500"
+                        >
+                          <option value="">Toifani tanlang</option>
+                          {currentFile.achievments?.ratings?.map((r, ri) => (
+                            <option key={r._id || ri} value={ri}>
+                              {r.rating} ball — {r.about}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    ))}
+                  </div>
+
                   <div>
                     <label
                       htmlFor="resultMessage"
