@@ -68,16 +68,7 @@ const TeacherDetail = () => {
     };
   }, [dispatch, id]);
 
-  const backButton = (
-    <Button
-      startIcon={<ArrowBackRounded />}
-      onClick={() => navigate(-1)}
-      color="inherit"
-      sx={{ mb: 2, ml: -1, color: "text.secondary" }}
-    >
-      Orqaga
-    </Button>
-  );
+  const backButton = null;
 
   if (loading && !currentTeacher) {
     return <Loader height={400} label="Ma'lumotlar yuklanmoqda..." />;

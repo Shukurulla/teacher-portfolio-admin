@@ -48,16 +48,7 @@ const JobDetail = () => {
     };
   }, [dispatch, jobId]);
 
-  const BackButton = (
-    <Button
-      startIcon={<ArrowBackRounded />}
-      onClick={() => navigate(`/teachers/${teacherId}`)}
-      color="inherit"
-      sx={{ mb: 2, color: "text.secondary" }}
-    >
-      Orqaga
-    </Button>
-  );
+  const BackButton = null;
 
   if (loading && !currentJob) {
     return <Loader label="Ma'lumotlar yuklanmoqda..." />;

@@ -207,16 +207,9 @@ const FileDetail = () => {
 
   return (
     <Box>
-      <Stack direction="row" alignItems="center" spacing={1} mb={3}>
-        <Button
-          onClick={() => navigate(-1)}
-          startIcon={<ArrowBackRoundedIcon />}
-          color="inherit"
-        >
-          Orqaga
-        </Button>
-        <Typography variant="h5">Hujjat ma'lumotlari</Typography>
-      </Stack>
+      <Typography variant="h5" sx={{ mb: 3 }}>
+        Hujjat ma'lumotlari
+      </Typography>
 
       <Box
         sx={{

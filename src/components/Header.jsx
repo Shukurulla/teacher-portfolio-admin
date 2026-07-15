@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   AppBar,
   Toolbar,
@@ -11,14 +12,18 @@ import {
   MenuItem,
   ListItemIcon,
   Divider,
+  Button,
 } from "@mui/material";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
+import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
 import { logout } from "../store/slices/authSlice";
 
 const Header = ({ onMenuClick, drawerWidth }) => {
   const { admin } = useSelector((s) => s.auth);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
   const [anchor, setAnchor] = useState(null);
   const roleLabel =
     admin?.role === "superadmin" ? "Super admin" : "Filial admin";
@@ -39,6 +44,16 @@ const Header = ({ onMenuClick, drawerWidth }) => {
         >
           <MenuRoundedIcon />
         </IconButton>
+
+        {pathname !== "/" && (
+          <Button
+            onClick={() => navigate(-1)}
+            startIcon={<ArrowBackRoundedIcon />}
+            sx={{ color: "text.secondary" }}
+          >
+            Orqaga
+          </Button>
+        )}
 
         <Box sx={{ flex: 1 }} />
 
