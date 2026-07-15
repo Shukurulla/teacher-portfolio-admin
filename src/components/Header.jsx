@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useLocation } from "react-router-dom";
 import {
   AppBar,
   Toolbar,
@@ -17,26 +16,9 @@ import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import { logout } from "../store/slices/authSlice";
 
-const TITLES = {
-  "/": "Bosh sahifa",
-  "/filials": "Filiallar boshqaruvi",
-  "/teachers": "O'qituvchilar",
-  "/new-files": "Yangi hujjatlar",
-  "/approved": "Tasdiqlangan hujjatlar",
-  "/rejected": "Rad etilgan hujjatlar",
-};
-
-const titleFor = (pathname) => {
-  if (TITLES[pathname]) return TITLES[pathname];
-  if (pathname.startsWith("/teachers")) return "O'qituvchi ma'lumotlari";
-  if (pathname.startsWith("/files")) return "Hujjat ma'lumotlari";
-  return "Admin panel";
-};
-
 const Header = ({ onMenuClick, drawerWidth }) => {
   const { admin } = useSelector((s) => s.auth);
   const dispatch = useDispatch();
-  const { pathname } = useLocation();
   const [anchor, setAnchor] = useState(null);
   const roleLabel =
     admin?.role === "superadmin" ? "Super admin" : "Filial admin";
@@ -57,9 +39,8 @@ const Header = ({ onMenuClick, drawerWidth }) => {
         >
           <MenuRoundedIcon />
         </IconButton>
-        <Typography variant="h6" sx={{ flex: 1 }} noWrap>
-          {titleFor(pathname)}
-        </Typography>
+
+        <Box sx={{ flex: 1 }} />
 
         <Box
           onClick={(e) => setAnchor(e.currentTarget)}

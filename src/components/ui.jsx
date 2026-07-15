@@ -18,7 +18,7 @@ export const PageHeader = ({ title, subtitle, action }) => (
     gap={2}
     mb={3}
   >
-    <Box>
+    <Box sx={{ minWidth: 0 }}>
       <Typography variant="h5">{title}</Typography>
       {subtitle && (
         <Typography variant="body2" color="text.secondary" mt={0.5}>
@@ -26,7 +26,7 @@ export const PageHeader = ({ title, subtitle, action }) => (
         </Typography>
       )}
     </Box>
-    {action}
+    {action && <Box sx={{ flexShrink: 0 }}>{action}</Box>}
   </Stack>
 );
 
