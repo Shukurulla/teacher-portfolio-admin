@@ -16,6 +16,7 @@ import {
   RejectedFilesPage,
   TeacherList,
   TeacterDetail,
+  SuperAdminFilials,
 } from "./pages";
 import { ProtectedRoute } from "./components";
 
@@ -38,6 +39,7 @@ function App() {
             }
           >
             <Route index element={<Dashboard />} />
+            <Route path="filials" element={<SuperAdminFilials />} />
             <Route path="teachers" element={<TeacherList />} />
             <Route path="teachers/:id" element={<TeacterDetail />} />
             <Route

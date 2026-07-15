@@ -2,14 +2,23 @@
 
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { fetchAllTeachers, removeTeacher } from "../store/slices/teacherSlice";
 import { toast } from "react-hot-toast";
+
+const FILIAL_NAMES = {
+  Nukus: "JTSBMQTMOI Nukus Filiali",
+  Fargʻona: "JTSBMQTMOI Fargʻona Filiali",
+  Samarqand: "JTSBMQTMOI Samarqand Filiali",
+  Toshkent: "JTSBMQTMO Instituti",
+};
 
 const TeacherList = () => {
   const dispatch = useDispatch();
   const { teachers, loading, error } = useSelector((state) => state.teachers);
   const [searchTerm, setSearchTerm] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const filialParam = searchParams.get("filial");
 
   useEffect(() => {
     dispatch(fetchAllTeachers());
@@ -30,13 +39,28 @@ const TeacherList = () => {
 
   const filteredTeachers = teachers?.filter((teacher) => {
     const fullName = `${teacher.firstName} ${teacher.lastName}`.toLowerCase();
-    return fullName.includes(searchTerm.toLowerCase());
+    const matchesSearch = fullName.includes(searchTerm.toLowerCase());
+    const matchesFilial =
+      !filialParam || teacher.region?.region === filialParam;
+    return matchesSearch && matchesFilial;
   });
 
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">O'qituvchilar ro'yxati</h1>
+        {filialParam && (
+          <div className="flex items-center gap-2 bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
+            <span>{FILIAL_NAMES[filialParam] || filialParam}</span>
+            <button
+              onClick={() => setSearchParams({})}
+              className="hover:text-blue-950"
+              title="Filtrni tozalash"
+            >
+              ✕
+            </button>
+          </div>
+        )}
       </div>
 
       <div className="bg-white rounded-lg shadow overflow-hidden">

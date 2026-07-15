@@ -1,11 +1,13 @@
 "use client";
 
 import { NavLink } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../store/slices/authSlice";
 
 const Sidebar = () => {
   const dispatch = useDispatch();
+  const { admin } = useSelector((state) => state.auth);
+  const isSuperAdmin = admin?.role === "superadmin";
 
   const handleLogout = () => {
     dispatch(logout());
@@ -38,6 +40,32 @@ const Sidebar = () => {
               Bosh sahifa
             </NavLink>
           </li>
+          {isSuperAdmin && (
+            <li>
+              <NavLink
+                to="/filials"
+                className={({ isActive }) =>
+                  `flex items-center px-4 py-3 ${
+                    isActive ? "bg-blue-700" : "hover:bg-blue-700"
+                  }`
+                }
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5 mr-3"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M4 4a2 2 0 012-2h8a2 2 0 012 2v14a1 1 0 01-1 1h-3v-3a1 1 0 00-1-1H9a1 1 0 00-1 1v3H5a1 1 0 01-1-1V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                Filiallar
+              </NavLink>
+            </li>
+          )}
           <li>
             <NavLink
               to="/teachers"

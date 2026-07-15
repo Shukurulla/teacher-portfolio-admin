@@ -8,3 +8,4 @@ export { default as RejectedFilesPage } from "./RejectedFiles.page";
 export { default as Login } from "./Login";
 export { default as NotFound } from "./NotFound";
 export { default as Dashboard } from "./Dashboard";
+export { default as SuperAdminFilials } from "./SuperAdminFilials";
