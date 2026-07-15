@@ -81,16 +81,12 @@ const TeacherCell = ({
       sx={{
         display: "inline-flex",
         maxWidth: "100%",
+        alignItems: "center",
         textDecoration: "none",
         color: "inherit",
-        borderRadius: 2,
-        px: 0.5,
-        py: 0.25,
-        mx: -0.5,
-        transition: "background-color .15s",
-        "&:hover": {
-          bgcolor: "action.hover",
-          "& .tc-name": { color: "primary.main" },
+        "&:hover .tc-name": {
+          color: "primary.main",
+          textDecoration: "underline",
         },
       }}
     >
