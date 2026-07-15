@@ -28,6 +28,7 @@ import PersonRounded from "@mui/icons-material/PersonRounded";
 import { fetchAllTeachers, removeTeacher } from "../store/slices/teacherSlice";
 import { toast } from "react-hot-toast";
 import { PageHeader, Loader, EmptyState, SoftChip } from "../components/ui";
+import { TeacherCell } from "../components";
 
 const FILIAL_NAMES = {
   Nukus: "JTSBMQTMOI Nukus Filiali",
@@ -183,18 +184,12 @@ const TeacherList = () => {
                         </Box>
                       </TableCell>
                       <TableCell>
-                        <Stack direction="row" alignItems="center" spacing={2}>
-                          <Avatar
-                            src={teacher.profileImage || DEFAULT_PROFILE_IMAGE}
-                            alt={`${teacher.firstName} ${teacher.lastName}`}
-                            sx={{ width: 40, height: 40 }}
-                          >
-                            <PersonRounded />
-                          </Avatar>
-                          <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                            {teacher.firstName} {teacher.lastName}
-                          </Typography>
-                        </Stack>
+                        <TeacherCell
+                          id={teacher._id}
+                          firstName={teacher.firstName}
+                          lastName={teacher.lastName}
+                          image={teacher.profileImage}
+                        />
                       </TableCell>
                       <TableCell sx={{ color: "text.secondary", whiteSpace: "nowrap" }}>
                         {teacher.phone}

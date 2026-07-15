@@ -15,6 +15,7 @@ import EventRoundedIcon from "@mui/icons-material/EventRounded";
 import { toast } from "react-hot-toast";
 import { getMalaka } from "../services/phase2Service";
 import { PageHeader, Loader, EmptyState, SoftChip } from "../components/ui";
+import { TeacherCell } from "../components";
 
 const FILIAL_NAMES = {
   Nukus: "JTSBMQTMOI Nukus Filiali",
@@ -71,8 +72,12 @@ const MalakaList = () => {
               <TableBody>
                 {list.map((r) => (
                   <TableRow key={r._id} hover>
-                    <TableCell sx={{ fontWeight: 600, whiteSpace: "nowrap" }}>
-                      {r.from?.firstName} {r.from?.lastName}
+                    <TableCell>
+                      <TeacherCell
+                        id={r.from?.id}
+                        firstName={r.from?.firstName}
+                        lastName={r.from?.lastName}
+                      />
                     </TableCell>
                     <TableCell sx={{ whiteSpace: "nowrap" }}>
                       <Stack direction="row" alignItems="center" gap={0.75}>

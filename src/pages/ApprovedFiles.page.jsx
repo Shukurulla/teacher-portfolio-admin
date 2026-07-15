@@ -21,6 +21,7 @@ import VisibilityRoundedIcon from "@mui/icons-material/VisibilityRounded";
 import InboxRoundedIcon from "@mui/icons-material/InboxRounded";
 import { getAllFiles } from "../services/fileService";
 import { PageHeader, StatusChip, Loader, EmptyState } from "../components/ui";
+import { TeacherCell } from "../components";
 
 const ApprovedFilesPage = () => {
   const navigate = useNavigate();
@@ -122,8 +123,13 @@ const ApprovedFilesPage = () => {
                     sx={{ cursor: "pointer" }}
                     onClick={() => navigate(`/files/${file._id}`)}
                   >
-                    <TableCell sx={{ fontWeight: 600 }}>
-                      {file.from?.firstName} {file.from?.lastName}
+                    <TableCell>
+                      <TeacherCell
+                        id={file.from?.id}
+                        firstName={file.from?.firstName}
+                        lastName={file.from?.lastName}
+                        onClick={(e) => e.stopPropagation()}
+                      />
                     </TableCell>
                     <TableCell>
                       <Typography variant="body2">

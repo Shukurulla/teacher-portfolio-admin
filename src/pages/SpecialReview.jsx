@@ -24,6 +24,7 @@ import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
 import { toast } from "react-hot-toast";
 import { getSpecialAll, reviewSpecial } from "../services/phase2Service";
 import { PageHeader, StatusChip, Loader, EmptyState, SoftChip } from "../components/ui";
+import { TeacherCell } from "../components";
 
 const SERVER = "https://server.portfolio-sport.uz";
 
@@ -106,8 +107,12 @@ const SpecialReview = () => {
               <TableBody>
                 {list.map((r) => (
                   <TableRow key={r._id} hover>
-                    <TableCell sx={{ fontWeight: 600, whiteSpace: "nowrap" }}>
-                      {r.from?.firstName} {r.from?.lastName}
+                    <TableCell>
+                      <TeacherCell
+                        id={r.from?.id}
+                        firstName={r.from?.firstName}
+                        lastName={r.from?.lastName}
+                      />
                     </TableCell>
                     <TableCell sx={{ maxWidth: 380 }}>
                       <Typography variant="body2">{r.itemTitle}</Typography>
@@ -138,12 +143,14 @@ const SpecialReview = () => {
             <DialogContent>
               <Stack spacing={2} sx={{ mt: 1 }}>
                 <Box>
-                  <Typography variant="caption" color="text.secondary">
+                  <Typography variant="caption" color="text.secondary" sx={{ display: "block", mb: 0.5 }}>
                     O'qituvchi
                   </Typography>
-                  <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                    {dialog.from?.firstName} {dialog.from?.lastName}
-                  </Typography>
+                  <TeacherCell
+                    id={dialog.from?.id}
+                    firstName={dialog.from?.firstName}
+                    lastName={dialog.from?.lastName}
+                  />
                 </Box>
                 <Box>
                   <Typography variant="caption" color="text.secondary">

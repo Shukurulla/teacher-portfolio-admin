@@ -20,6 +20,7 @@ import VisibilityRoundedIcon from "@mui/icons-material/VisibilityRounded";
 import InboxRoundedIcon from "@mui/icons-material/InboxRounded";
 import { fetchNewFiles } from "../store/slices/fileSlice";
 import { PageHeader, StatusChip, Loader, EmptyState } from "../components/ui";
+import { TeacherCell } from "../components";
 
 const NewAchievementsPage = () => {
   const dispatch = useDispatch();
@@ -107,8 +108,13 @@ const NewAchievementsPage = () => {
                     sx={{ cursor: "pointer" }}
                     onClick={() => navigate(`/files/${file._id}`)}
                   >
-                    <TableCell sx={{ fontWeight: 600 }}>
-                      {file.from?.firstName} {file.from?.lastName}
+                    <TableCell>
+                      <TeacherCell
+                        id={file.from?.id}
+                        firstName={file.from?.firstName}
+                        lastName={file.from?.lastName}
+                        onClick={(e) => e.stopPropagation()}
+                      />
                     </TableCell>
                     <TableCell>
                       <Typography variant="body2">

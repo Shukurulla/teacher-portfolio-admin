@@ -17,6 +17,7 @@ import ReportProblemRoundedIcon from "@mui/icons-material/ReportProblemRounded";
 import { toast } from "react-hot-toast";
 import { getTeachers, getSpecialAll } from "../services/phase2Service";
 import { PageHeader, StatCard, Loader, EmptyState, SoftChip } from "../components/ui";
+import { TeacherCell } from "../components";
 
 const FILIAL_NAMES = {
   Nukus: "Nukus Filiali",
@@ -164,8 +165,13 @@ const Criteria = () => {
                   <TableBody>
                     {filtered.map((t) => (
                       <TableRow key={t._id} hover>
-                        <TableCell sx={{ fontWeight: 600 }}>
-                          {t.firstName} {t.lastName}
+                        <TableCell>
+                          <TeacherCell
+                            id={t._id}
+                            firstName={t.firstName}
+                            lastName={t.lastName}
+                            image={t.profileImage}
+                          />
                         </TableCell>
                         <TableCell sx={{ color: "text.secondary" }}>
                           {FILIAL_NAMES[t.region?.region] || t.region?.region || "—"}

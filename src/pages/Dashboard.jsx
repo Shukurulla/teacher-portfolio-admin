@@ -22,6 +22,7 @@ import InboxRoundedIcon from "@mui/icons-material/InboxRounded";
 import { fetchAllTeachers } from "../store/slices/teacherSlice";
 import { fetchAllFiles } from "../store/slices/fileSlice";
 import { PageHeader, StatCard, StatusChip, Loader, EmptyState } from "../components/ui";
+import { TeacherCell } from "../components";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -133,8 +134,13 @@ const Dashboard = () => {
                     sx={{ cursor: "pointer" }}
                     onClick={() => navigate(`/files/${file._id}`)}
                   >
-                    <TableCell sx={{ fontWeight: 600 }}>
-                      {file.from?.firstName} {file.from?.lastName}
+                    <TableCell>
+                      <TeacherCell
+                        id={file.from?.id}
+                        firstName={file.from?.firstName}
+                        lastName={file.from?.lastName}
+                        onClick={(e) => e.stopPropagation()}
+                      />
                     </TableCell>
                     <TableCell>
                       <Typography variant="body2">

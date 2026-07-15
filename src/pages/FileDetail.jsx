@@ -25,6 +25,7 @@ import {
 } from "../store/slices/fileSlice";
 import { toast } from "react-hot-toast";
 import { StatusChip, Loader } from "../components/ui";
+import { TeacherCell } from "../components";
 
 const InfoRow = ({ label, children }) => (
   <Box>
@@ -247,9 +248,20 @@ const FileDetail = () => {
             </Box>
             <CardContent>
               <Stack spacing={2}>
-                <InfoRow label="O'qituvchi">
-                  {currentFile.from?.firstName} {currentFile.from?.lastName}
-                </InfoRow>
+                <Box>
+                  <Typography
+                    variant="caption"
+                    color="text.secondary"
+                    sx={{ fontWeight: 600, display: "block", mb: 0.75 }}
+                  >
+                    O'qituvchi
+                  </Typography>
+                  <TeacherCell
+                    id={currentFile.from?.id}
+                    firstName={currentFile.from?.firstName}
+                    lastName={currentFile.from?.lastName}
+                  />
+                </Box>
                 <InfoRow label="Yutuq">{currentFile.achievments?.title}</InfoRow>
                 <InfoRow label="Bo'lim">{currentFile.achievments?.section}</InfoRow>
                 <InfoRow label="Jami ball">
