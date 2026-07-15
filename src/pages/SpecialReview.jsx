@@ -25,6 +25,7 @@ import { toast } from "react-hot-toast";
 import { getSpecialAll, reviewSpecial } from "../services/phase2Service";
 import { PageHeader, StatusChip, Loader, EmptyState, SoftChip } from "../components/ui";
 import { TeacherCell } from "../components";
+import { formatDate } from "../utils/format";
 
 const SERVER = "https://server.portfolio-sport.uz";
 
@@ -118,7 +119,7 @@ const SpecialReview = () => {
                       <Typography variant="body2">{r.itemTitle}</Typography>
                     </TableCell>
                     <TableCell sx={{ color: "text.secondary", whiteSpace: "nowrap" }}>
-                      {new Date(r.createdAt).toLocaleDateString("uz-UZ")}
+                      {formatDate(r.createdAt)}
                     </TableCell>
                     <TableCell>
                       <StatusChip status={r.status} />

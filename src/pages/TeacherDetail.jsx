@@ -28,6 +28,7 @@ import {
   clearCurrentTeacher,
 } from "../store/slices/teacherSlice";
 import { PageHeader, StatCard, Loader, EmptyState } from "../components/ui";
+import { formatDate, formatPhone } from "../utils/format";
 
 const FALLBACK_IMAGE =
   "https://as2.ftcdn.net/jpg/05/89/93/27/1000_F_589932782_vQAEAZhHnq1QCGu5ikwrYaQD0Mmurm0N.jpg";
@@ -132,7 +133,7 @@ const TeacherDetail = () => {
               <Stack spacing={0.75}>
                 {currentTeacher.phone && (
                   <InfoRow icon={<PhoneRounded />}>
-                    {currentTeacher.phone}
+                    {formatPhone(currentTeacher.phone)}
                   </InfoRow>
                 )}
                 {currentTeacher.region?.region && (
@@ -147,7 +148,7 @@ const TeacherDetail = () => {
                 sx={{ mt: 1, display: "block" }}
               >
                 Ro'yxatdan o'tgan sana:{" "}
-                {new Date(currentTeacher.createdAt).toLocaleDateString("uz-UZ")}
+                {formatDate(currentTeacher.createdAt)}
               </Typography>
             </Box>
           </Stack>
@@ -251,7 +252,7 @@ const TeacherDetail = () => {
                         color="text.disabled"
                         sx={{ mt: 0.5, display: "block" }}
                       >
-                        {new Date(job.createdAt).toLocaleDateString("uz-UZ")}
+                        {formatDate(job.createdAt)}
                       </Typography>
                     </Box>
                     <VisibilityRounded

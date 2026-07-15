@@ -26,6 +26,7 @@ import {
 import { toast } from "react-hot-toast";
 import { StatusChip, Loader } from "../components/ui";
 import { TeacherCell } from "../components";
+import { formatDate } from "../utils/format";
 
 const InfoRow = ({ label, children }) => (
   <Box>
@@ -269,7 +270,7 @@ const FileDetail = () => {
                   <StatusChip status={currentFile.status} />
                 </Box>
                 <InfoRow label="Yuborilgan sana">
-                  {new Date(currentFile.createdAt).toLocaleDateString("uz-UZ")}
+                  {formatDate(currentFile.createdAt)}
                 </InfoRow>
               </Stack>
             </CardContent>

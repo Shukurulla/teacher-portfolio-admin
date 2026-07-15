@@ -29,6 +29,7 @@ import { fetchAllTeachers, removeTeacher } from "../store/slices/teacherSlice";
 import { toast } from "react-hot-toast";
 import { PageHeader, Loader, EmptyState, SoftChip } from "../components/ui";
 import { TeacherCell } from "../components";
+import { formatPhone } from "../utils/format";
 
 const FILIAL_NAMES = {
   Nukus: "JTSBMQTMOI Nukus Filiali",
@@ -192,7 +193,7 @@ const TeacherList = () => {
                         />
                       </TableCell>
                       <TableCell sx={{ color: "text.secondary", whiteSpace: "nowrap" }}>
-                        {teacher.phone}
+                        {formatPhone(teacher.phone)}
                       </TableCell>
                       <TableCell align="center">
                         <SoftChip label={teacher.jobsCount || 0} color="#2563eb" />

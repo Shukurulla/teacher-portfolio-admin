@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Avatar, Box, Stack, Typography } from "@mui/material";
 import { alpha } from "@mui/material/styles";
+import { formatPhone } from "../utils/format";
 
 const PALETTE = [
   "#2563eb",
@@ -64,7 +65,7 @@ const TeacherCell = ({
         </Typography>
         {phone && (
           <Typography variant="caption" color="text.secondary" noWrap>
-            {phone}
+            {formatPhone(phone)}
           </Typography>
         )}
       </Box>

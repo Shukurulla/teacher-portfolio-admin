@@ -23,6 +23,7 @@ import { fetchAllTeachers } from "../store/slices/teacherSlice";
 import { fetchAllFiles } from "../store/slices/fileSlice";
 import { PageHeader, StatCard, StatusChip, Loader, EmptyState } from "../components/ui";
 import { TeacherCell } from "../components";
+import { formatDate } from "../utils/format";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -151,7 +152,7 @@ const Dashboard = () => {
                       </Typography>
                     </TableCell>
                     <TableCell sx={{ color: "text.secondary", whiteSpace: "nowrap" }}>
-                      {new Date(file.createdAt).toLocaleDateString("uz-UZ")}
+                      {formatDate(file.createdAt)}
                     </TableCell>
                     <TableCell>
                       <StatusChip status={file.status} />

@@ -16,6 +16,7 @@ import { toast } from "react-hot-toast";
 import { getMalaka } from "../services/phase2Service";
 import { PageHeader, Loader, EmptyState, SoftChip } from "../components/ui";
 import { TeacherCell } from "../components";
+import { formatDate } from "../utils/format";
 
 const FILIAL_NAMES = {
   Nukus: "JTSBMQTMOI Nukus Filiali",
@@ -83,11 +84,7 @@ const MalakaList = () => {
                       <Stack direction="row" alignItems="center" gap={0.75}>
                         <EventRoundedIcon fontSize="small" color="primary" />
                         <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                          {new Date(r.date).toLocaleDateString("uz-UZ", {
-                            year: "numeric",
-                            month: "long",
-                            day: "numeric",
-                          })}
+                          {formatDate(r.date)}
                         </Typography>
                       </Stack>
                     </TableCell>

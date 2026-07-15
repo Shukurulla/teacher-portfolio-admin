@@ -21,6 +21,7 @@ import InboxRoundedIcon from "@mui/icons-material/InboxRounded";
 import { fetchNewFiles } from "../store/slices/fileSlice";
 import { PageHeader, StatusChip, Loader, EmptyState } from "../components/ui";
 import { TeacherCell } from "../components";
+import { formatDate } from "../utils/format";
 
 const NewAchievementsPage = () => {
   const dispatch = useDispatch();
@@ -127,7 +128,7 @@ const NewAchievementsPage = () => {
                     <TableCell
                       sx={{ color: "text.secondary", whiteSpace: "nowrap" }}
                     >
-                      {new Date(file.createdAt).toLocaleDateString("uz-UZ")}
+                      {formatDate(file.createdAt)}
                     </TableCell>
                     <TableCell>
                       <StatusChip status={file.status} />

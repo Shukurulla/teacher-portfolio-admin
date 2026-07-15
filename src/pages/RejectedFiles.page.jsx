@@ -22,6 +22,7 @@ import InboxRoundedIcon from "@mui/icons-material/InboxRounded";
 import { getAllFiles } from "../services/fileService";
 import { PageHeader, StatusChip, Loader, EmptyState } from "../components/ui";
 import { TeacherCell } from "../components";
+import { formatDate } from "../utils/format";
 
 const RejectedFilesPage = () => {
   const navigate = useNavigate();
@@ -142,7 +143,7 @@ const RejectedFilesPage = () => {
                     <TableCell
                       sx={{ color: "text.secondary", whiteSpace: "nowrap" }}
                     >
-                      {new Date(file.createdAt).toLocaleDateString("uz-UZ")}
+                      {formatDate(file.createdAt)}
                     </TableCell>
                     <TableCell>
                       <StatusChip status={file.status} />

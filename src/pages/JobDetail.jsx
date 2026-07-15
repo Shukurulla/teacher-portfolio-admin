@@ -31,6 +31,7 @@ import {
   Loader,
   EmptyState,
 } from "../components/ui";
+import { formatDate } from "../utils/format";
 
 const JobDetail = () => {
   const { teacherId, jobId } = useParams();
@@ -120,7 +121,7 @@ const JobDetail = () => {
                   <Box component="span" sx={{ fontWeight: 600 }}>
                     Qo'shilgan sana:
                   </Box>{" "}
-                  {new Date(currentJob.createdAt).toLocaleDateString("uz-UZ")}
+                  {formatDate(currentJob.createdAt)}
                 </Typography>
               </Stack>
             </Box>
@@ -195,7 +196,7 @@ const JobDetail = () => {
                       <TableCell
                         sx={{ color: "text.secondary", whiteSpace: "nowrap" }}
                       >
-                        {new Date(file.createdAt).toLocaleDateString("uz-UZ")}
+                        {formatDate(file.createdAt)}
                       </TableCell>
                       <TableCell align="right">
                         <Button
