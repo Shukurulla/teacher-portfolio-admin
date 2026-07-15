@@ -27,6 +27,20 @@ export const getAllFiles = async () => {
   }
 };
 
+// Sahifalangan yangi hujjatlar (pagination + search)
+export const getNewFilesPaged = async (page, limit = 10, search = "") => {
+  const res = await api.get("/new-files", { params: { page, limit, search } });
+  return res.data; // { data, total, page, limit, totalPages }
+};
+
+// Sahifalangan fayllar (status + pagination + search)
+export const getFilesPaged = async (status, page, limit = 10, search = "") => {
+  const res = await api.get("/files", {
+    params: { status, page, limit, search },
+  });
+  return res.data;
+};
+
 // Fayl ma'lumotlarini ID bo'yicha olish
 export const getFileById = async (id) => {
   try {
