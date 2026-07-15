@@ -1,8 +1,22 @@
-"use client";
-
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import {
+  Box,
+  Card,
+  CardContent,
+  Typography,
+  Button,
+  TextField,
+  MenuItem,
+  Stack,
+  Divider,
+  Alert,
+} from "@mui/material";
+import ArrowBackRoundedIcon from "@mui/icons-material/ArrowBackRounded";
+import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
+import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
+import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
 import {
   fetchFileById,
   updateFile,
@@ -10,6 +24,18 @@ import {
   clearCurrentFile,
 } from "../store/slices/fileSlice";
 import { toast } from "react-hot-toast";
+import { StatusChip, Loader } from "../components/ui";
+
+const InfoRow = ({ label, children }) => (
+  <Box>
+    <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 600 }}>
+      {label}
+    </Typography>
+    <Typography variant="body2" sx={{ mt: 0.25 }}>
+      {children}
+    </Typography>
+  </Box>
+);
 
 const FileDetail = () => {
   const { fileId } = useParams();
@@ -17,7 +43,6 @@ const FileDetail = () => {
   const navigate = useNavigate();
   const {
     currentFile: fileData,
-    filePreview,
     loading,
     error,
   } = useSelector((state) => state.files);
@@ -26,13 +51,11 @@ const FileDetail = () => {
   const [resultMessage, setResultMessage] = useState("");
   const [selectedRatings, setSelectedRatings] = useState([]);
 
-  // Access the nested data property
   const currentFile = fileData?.data || null;
 
   useEffect(() => {
     dispatch(fetchFileById(fileId));
     dispatch(fetchFilePreview(fileId));
-
     return () => {
       dispatch(clearCurrentFile());
     };
@@ -74,8 +97,8 @@ const FileDetail = () => {
         toast.success("Fayl muvaffaqiyatli tasdiqlandi");
         window.location.reload();
       })
-      .catch((error) => {
-        toast.error(error || "Faylni tasdiqlashda xatolik yuz berdi");
+      .catch((err) => {
+        toast.error(err || "Faylni tasdiqlashda xatolik yuz berdi");
       });
   };
 
@@ -84,7 +107,6 @@ const FileDetail = () => {
       toast.error("Iltimos, rad etish sababini kiriting");
       return;
     }
-
     dispatch(
       updateFile({
         id: fileId,
@@ -100,292 +122,243 @@ const FileDetail = () => {
         toast.success("Fayl rad etildi");
         window.location.reload();
       })
-      .catch((error) => {
-        toast.error(error || "Faylni rad etishda xatolik yuz berdi");
+      .catch((err) => {
+        toast.error(err || "Faylni rad etishda xatolik yuz berdi");
       });
   };
 
   const renderSingleFile = (file, idx) => {
     const fileUrl = `https://server.portfolio-sport.uz${file.fileUrl}`;
-    const fileExtension = file.fileUrl?.split(".").pop()?.toLowerCase() || "";
+    const ext = file.fileUrl?.split(".").pop()?.toLowerCase() || "";
 
     let preview;
-    if (["jpg", "jpeg", "png", "gif"].includes(fileExtension)) {
+    if (["jpg", "jpeg", "png", "gif", "webp"].includes(ext)) {
       preview = (
-        <img
+        <Box
+          component="img"
           src={fileUrl}
           alt={file.fileTitle}
-          className="max-w-full max-h-[500px] object-contain"
+          sx={{ maxWidth: "100%", maxHeight: 500, objectFit: "contain", borderRadius: 2 }}
         />
       );
-    } else if (fileExtension === "pdf") {
+    } else if (ext === "pdf") {
       preview = (
-        <iframe src={fileUrl} className="w-full h-[600px]" title={file.fileTitle} />
+        <Box
+          component="iframe"
+          src={fileUrl}
+          title={file.fileTitle}
+          sx={{ width: "100%", height: 600, border: 0, borderRadius: 2 }}
+        />
       );
-    } else if (["mp4", "webm"].includes(fileExtension)) {
+    } else if (["mp4", "webm"].includes(ext)) {
       preview = (
-        <video controls className="max-w-full max-h-[500px]">
-          <source src={fileUrl} type={`video/${fileExtension}`} />
-        </video>
+        <Box component="video" controls sx={{ maxWidth: "100%", maxHeight: 500 }}>
+          <source src={fileUrl} type={`video/${ext}`} />
+        </Box>
       );
-    } else if (["mp3", "wav", "ogg"].includes(fileExtension)) {
+    } else if (["mp3", "wav", "ogg"].includes(ext)) {
       preview = (
-        <audio controls>
-          <source src={fileUrl} type={`audio/${fileExtension}`} />
-        </audio>
+        <Box component="audio" controls>
+          <source src={fileUrl} type={`audio/${ext}`} />
+        </Box>
       );
     } else {
       preview = (
-        <a
+        <Button
+          variant="contained"
           href={fileUrl}
           download
-          className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+          startIcon={<DownloadRoundedIcon />}
         >
           Faylni yuklab olish
-        </a>
+        </Button>
       );
     }
 
     return (
-      <div key={file._id || idx} className="mb-6 border-b pb-4 last:border-b-0">
-        <p className="text-sm font-medium text-gray-700 mb-2">
-          {file.fileTitle}
-        </p>
-        <div className="flex justify-center">{preview}</div>
-      </div>
+      <Box
+        key={file._id || idx}
+        sx={{ mb: 3, pb: 3, borderBottom: "1px solid", borderColor: "divider", "&:last-of-type": { border: 0, mb: 0, pb: 0 } }}
+      >
+        <Stack direction="row" alignItems="center" justifyContent="space-between" mb={1.5}>
+          <Typography variant="subtitle2">{file.fileTitle}</Typography>
+          {file.rating?.rating != null && (
+            <StatusChip status="Tasdiqlandi" />
+          )}
+        </Stack>
+        <Box sx={{ display: "flex", justifyContent: "center" }}>{preview}</Box>
+      </Box>
     );
   };
 
-  const renderFilePreview = () => {
-    if (!currentFile?.files?.length) return null;
-    return currentFile.files.map(renderSingleFile);
-  };
-
-  if (loading && !currentFile) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-      </div>
-    );
-  }
+  if (loading && !currentFile) return <Loader height={400} />;
 
   if (error) {
-    return (
-      <div
-        className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
-        role="alert"
-      >
-        <strong className="font-bold">Xatolik!</strong>
-        <span className="block sm:inline"> {error}</span>
-      </div>
-    );
+    return <Alert severity="error">{error}</Alert>;
   }
 
   if (!currentFile) {
-    return (
-      <div
-        className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative"
-        role="alert"
-      >
-        <strong className="font-bold">Diqqat!</strong>
-        <span className="block sm:inline"> Fayl topilmadi.</span>
-      </div>
-    );
+    return <Alert severity="warning">Fayl topilmadi.</Alert>;
   }
 
+  const totalBall =
+    currentFile.files?.reduce((sum, f) => sum + (f.rating?.rating || 0), 0) || 0;
+
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center">
-          <button
-            onClick={() => navigate(-1)}
-            className="mr-4 text-blue-500 hover:text-blue-700"
-          >
-            ← Orqaga
-          </button>
-          <h1 className="text-2xl font-bold">Fayl ma'lumotlari</h1>
-        </div>
-      </div>
+    <Box>
+      <Stack direction="row" alignItems="center" spacing={1} mb={3}>
+        <Button
+          onClick={() => navigate(-1)}
+          startIcon={<ArrowBackRoundedIcon />}
+          color="inherit"
+        >
+          Orqaga
+        </Button>
+        <Typography variant="h5">Hujjat ma'lumotlari</Typography>
+      </Stack>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 space-y-6">
-          <div className="bg-white rounded-lg shadow overflow-hidden">
-            <div className="px-6 py-4 border-b">
-              <h2 className="font-semibold text-lg">Fayl ko'rinishi</h2>
-            </div>
-            <div className="p-6">
-              {loading ? (
-                <div className="flex items-center justify-center min-h-[300px]">
-                  <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-                </div>
-              ) : (
-                renderFilePreview()
-              )}
-            </div>
-          </div>
-        </div>
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateColumns: { xs: "1fr", lg: "2fr 1fr" },
+          gap: 2.5,
+          alignItems: "start",
+        }}
+      >
+        {/* Preview */}
+        <Card>
+          <Box sx={{ px: 3, py: 2, borderBottom: "1px solid", borderColor: "divider" }}>
+            <Typography variant="h6">Fayl ko'rinishi</Typography>
+          </Box>
+          <CardContent sx={{ p: 3 }}>
+            {loading ? (
+              <Loader height={300} />
+            ) : (
+              currentFile.files?.map(renderSingleFile)
+            )}
+          </CardContent>
+        </Card>
 
-        <div className="space-y-6">
-          <div className="bg-white rounded-lg shadow overflow-hidden">
-            <div className="px-6 py-4 border-b">
-              <h2 className="font-semibold text-lg">Fayl haqida</h2>
-            </div>
-            <div className="p-6">
-              <div className="space-y-4">
-                <div>
-                  <h3 className="text-sm font-medium text-gray-500">
-                    O'qituvchi
-                  </h3>
-                  <p className="mt-1 text-sm text-gray-900">
-                    {currentFile.from?.firstName} {currentFile.from?.lastName}
-                  </p>
-                </div>
-
-                <div>
-                  <h3 className="text-sm font-medium text-gray-500">Yutuq</h3>
-                  <p className="mt-1 text-sm text-gray-900">
-                    {currentFile.achievments?.title}
-                  </p>
-                </div>
-
-                <div>
-                  <h3 className="text-sm font-medium text-gray-500">Bo'lim</h3>
-                  <p className="mt-1 text-sm text-gray-900">
-                    {currentFile.achievments?.section}
-                  </p>
-                </div>
-
-                <div>
-                  <h3 className="text-sm font-medium text-gray-500">
-                    Jami ball
-                  </h3>
-                  <p className="mt-1 text-sm text-gray-900">
-                    {currentFile.files?.reduce(
-                      (sum, f) => sum + (f.rating?.rating || 0),
-                      0
-                    ) || "-"}
-                  </p>
-                </div>
-
-                <div>
-                  <h3 className="text-sm font-medium text-gray-500">Holat</h3>
-                  <p className="mt-1">
-                    <span
-                      className={`px-2 py-1 text-xs font-medium rounded-full ${
-                        currentFile.status === "Tasdiqlandi"
-                          ? "bg-green-100 text-green-800"
-                          : currentFile.status === "Tasdiqlanmadi"
-                          ? "bg-red-100 text-red-800"
-                          : "bg-yellow-100 text-yellow-800"
-                      }`}
-                    >
-                      {currentFile.status}
-                    </span>
-                  </p>
-                </div>
-
-                <div>
-                  <h3 className="text-sm font-medium text-gray-500">
-                    Yuborilgan sana
-                  </h3>
-                  <p className="mt-1 text-sm text-gray-900">
-                    {new Date(currentFile.createdAt).toLocaleDateString(
-                      "uz-UZ"
-                    )}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
+        {/* Right column */}
+        <Stack spacing={2.5}>
+          <Card>
+            <Box sx={{ px: 3, py: 2, borderBottom: "1px solid", borderColor: "divider" }}>
+              <Typography variant="h6">Hujjat haqida</Typography>
+            </Box>
+            <CardContent>
+              <Stack spacing={2}>
+                <InfoRow label="O'qituvchi">
+                  {currentFile.from?.firstName} {currentFile.from?.lastName}
+                </InfoRow>
+                <InfoRow label="Yutuq">{currentFile.achievments?.title}</InfoRow>
+                <InfoRow label="Bo'lim">{currentFile.achievments?.section}</InfoRow>
+                <InfoRow label="Jami ball">
+                  <Typography component="span" sx={{ fontWeight: 800, color: "primary.main" }}>
+                    {totalBall || "—"}
+                  </Typography>
+                </InfoRow>
+                <Box>
+                  <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 600, display: "block", mb: 0.5 }}>
+                    Holat
+                  </Typography>
+                  <StatusChip status={currentFile.status} />
+                </Box>
+                <InfoRow label="Yuborilgan sana">
+                  {new Date(currentFile.createdAt).toLocaleDateString("uz-UZ")}
+                </InfoRow>
+              </Stack>
+            </CardContent>
+          </Card>
 
           {currentFile.status === "Tekshirilmoqda" && (
-            <div className="bg-white rounded-lg shadow overflow-hidden">
-              <div className="px-6 py-4 border-b">
-                <h2 className="font-semibold text-lg">Baholash</h2>
-              </div>
-              <div className="p-6">
-                <div className="space-y-4">
-                  <div className="space-y-3">
-                    <h3 className="text-sm font-medium text-gray-700">
+            <Card>
+              <Box sx={{ px: 3, py: 2, borderBottom: "1px solid", borderColor: "divider" }}>
+                <Typography variant="h6">Baholash</Typography>
+              </Box>
+              <CardContent>
+                <Stack spacing={2.5}>
+                  <Box>
+                    <Typography variant="subtitle2" gutterBottom>
                       Har bir hujjat uchun toifani tanlang
-                    </h3>
-                    {currentFile.files?.map((f, idx) => (
-                      <div key={f._id || idx}>
-                        <label className="block text-xs text-gray-500 mb-1">
-                          {f.fileTitle}
-                        </label>
-                        <select
+                    </Typography>
+                    <Stack spacing={1.5}>
+                      {currentFile.files?.map((f, idx) => (
+                        <TextField
+                          key={f._id || idx}
+                          select
+                          size="small"
+                          fullWidth
+                          label={f.fileTitle}
                           value={selectedRatings[idx] ?? ""}
                           onChange={(e) => {
                             const next = [...selectedRatings];
                             next[idx] = e.target.value;
                             setSelectedRatings(next);
                           }}
-                          className="block w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-blue-500"
                         >
-                          <option value="">Toifani tanlang</option>
+                          <MenuItem value="">
+                            <em>Toifani tanlang</em>
+                          </MenuItem>
                           {currentFile.achievments?.ratings?.map((r, ri) => (
-                            <option key={r._id || ri} value={ri}>
+                            <MenuItem key={r._id || ri} value={ri}>
                               {r.rating} ball — {r.about}
-                            </option>
+                            </MenuItem>
                           ))}
-                        </select>
-                      </div>
-                    ))}
-                  </div>
+                        </TextField>
+                      ))}
+                    </Stack>
+                  </Box>
 
-                  <div>
-                    <label
-                      htmlFor="resultMessage"
-                      className="block text-sm font-medium text-gray-700"
-                    >
-                      Natija xabari
-                    </label>
-                    <textarea
-                      id="resultMessage"
-                      rows={4}
-                      className="mt-1 outline-none block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                      placeholder="Natija haqida xabar yozing..."
-                      value={resultMessage}
-                      onChange={(e) => setResultMessage(e.target.value)}
-                    ></textarea>
-                  </div>
+                  <Divider />
 
-                  <div className="flex space-x-3">
-                    <button
+                  <TextField
+                    label="Natija xabari"
+                    multiline
+                    rows={3}
+                    fullWidth
+                    placeholder="Natija haqida xabar yozing..."
+                    value={resultMessage}
+                    onChange={(e) => setResultMessage(e.target.value)}
+                  />
+
+                  <Stack direction="row" spacing={1.5}>
+                    <Button
+                      variant="contained"
+                      color="success"
+                      startIcon={<CheckCircleRoundedIcon />}
                       onClick={handleApprove}
-                      className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                      fullWidth
                     >
                       Tasdiqlash
-                    </button>
-                    <button
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      color="error"
+                      startIcon={<CancelRoundedIcon />}
                       onClick={handleReject}
-                      className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                      fullWidth
                     >
                       Rad etish
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
+                    </Button>
+                  </Stack>
+                </Stack>
+              </CardContent>
+            </Card>
           )}
 
-          {currentFile.status !== "Tekshirilmoqda" &&
-            currentFile.resultMessage && (
-              <div className="bg-white rounded-lg shadow overflow-hidden">
-                <div className="px-6 py-4 border-b">
-                  <h2 className="font-semibold text-lg">Natija xabari</h2>
-                </div>
-                <div className="p-6">
-                  <p className="text-sm text-gray-900">
-                    {currentFile.resultMessage}
-                  </p>
-                </div>
-              </div>
-            )}
-        </div>
-      </div>
-    </div>
+          {currentFile.status !== "Tekshirilmoqda" && currentFile.resultMessage && (
+            <Card>
+              <Box sx={{ px: 3, py: 2, borderBottom: "1px solid", borderColor: "divider" }}>
+                <Typography variant="h6">Natija xabari</Typography>
+              </Box>
+              <CardContent>
+                <Typography variant="body2">{currentFile.resultMessage}</Typography>
+              </CardContent>
+            </Card>
+          )}
+        </Stack>
+      </Box>
+    </Box>
   );
 };
 

@@ -1,114 +1,115 @@
-"use client";
-
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import {
+  Box,
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Typography,
+  Divider,
+  Stack,
+  Avatar,
+} from "@mui/material";
+import DashboardRoundedIcon from "@mui/icons-material/DashboardRounded";
+import ApartmentRoundedIcon from "@mui/icons-material/ApartmentRounded";
+import GroupsRoundedIcon from "@mui/icons-material/GroupsRounded";
+import InboxRoundedIcon from "@mui/icons-material/InboxRounded";
+import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
+import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
+import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
+import SchoolRoundedIcon from "@mui/icons-material/SchoolRounded";
 import { logout } from "../store/slices/authSlice";
 
-const Sidebar = () => {
+const Sidebar = ({ onNavigate }) => {
+  const location = useLocation();
   const dispatch = useDispatch();
-  const { admin } = useSelector((state) => state.auth);
-  const isSuperAdmin = admin?.role === "superadmin";
+  const { admin } = useSelector((s) => s.auth);
+  const isSuper = admin?.role === "superadmin";
 
-  const handleLogout = () => {
-    dispatch(logout());
-  };
+  const items = [
+    { to: "/", label: "Bosh sahifa", icon: <DashboardRoundedIcon />, end: true },
+    ...(isSuper
+      ? [{ to: "/filials", label: "Filiallar", icon: <ApartmentRoundedIcon /> }]
+      : []),
+    { to: "/teachers", label: "O'qituvchilar", icon: <GroupsRoundedIcon /> },
+    { to: "/new-files", label: "Yangi hujjatlar", icon: <InboxRoundedIcon /> },
+    { to: "/approved", label: "Tasdiqlangan", icon: <CheckCircleRoundedIcon /> },
+    { to: "/rejected", label: "Rad etilgan", icon: <CancelRoundedIcon /> },
+  ];
+
+  const active = (to, end) =>
+    end ? location.pathname === to : location.pathname.startsWith(to);
 
   return (
-    <div className="bg-blue-800 text-white w-64 flex-shrink-0 hidden md:block">
-      <div className="p-4">
-        <h2 className="text-2xl font-bold">Admin Panel</h2>
-      </div>
-      <nav className="mt-8">
-        <ul className="space-y-2">
-          <li>
-            <NavLink
-              to="/"
-              className={({ isActive }) =>
-                `flex items-center px-4 py-3 ${
-                  isActive ? "bg-blue-700" : "hover:bg-blue-700"
-                }`
-              }
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 mr-3"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
-              </svg>
-              Bosh sahifa
-            </NavLink>
-          </li>
-          {isSuperAdmin && (
-            <li>
-              <NavLink
-                to="/filials"
-                className={({ isActive }) =>
-                  `flex items-center px-4 py-3 ${
-                    isActive ? "bg-blue-700" : "hover:bg-blue-700"
-                  }`
-                }
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 mr-3"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M4 4a2 2 0 012-2h8a2 2 0 012 2v14a1 1 0 01-1 1h-3v-3a1 1 0 00-1-1H9a1 1 0 00-1 1v3H5a1 1 0 01-1-1V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                Filiallar
-              </NavLink>
-            </li>
-          )}
-          <li>
-            <NavLink
-              to="/teachers"
-              className={({ isActive }) =>
-                `flex items-center px-4 py-3 ${
-                  isActive ? "bg-blue-700" : "hover:bg-blue-700"
-                }`
-              }
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 mr-3"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
-              </svg>
-              O'qituvchilar
-            </NavLink>
-          </li>
-          <li className="border-t border-blue-700 mt-4 pt-4">
-            <button
-              onClick={handleLogout}
-              className="flex items-center px-4 py-3 w-full text-left hover:bg-blue-700"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 mr-3"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M3 3a1 1 0 00-1 1v12a1 1 0 001 1h12a1 1 0 001-1V4a1 1 0 00-1-1H3zm1 2h10v10H4V5zm4 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1zm0 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              Chiqish
-            </button>
-          </li>
-        </ul>
-      </nav>
-    </div>
+    <Box
+      sx={{
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        color: "#e2e8f0",
+        background: "linear-gradient(180deg,#0f172a 0%,#1e293b 100%)",
+      }}
+    >
+      <Stack direction="row" alignItems="center" gap={1.5} sx={{ px: 2.5, py: 2.75 }}>
+        <Avatar sx={{ bgcolor: "primary.main", width: 42, height: 42 }}>
+          <SchoolRoundedIcon />
+        </Avatar>
+        <Box>
+          <Typography sx={{ fontWeight: 800, lineHeight: 1.1 }}>
+            Portfolio Sport
+          </Typography>
+          <Typography variant="caption" sx={{ color: "#94a3b8" }}>
+            Admin panel
+          </Typography>
+        </Box>
+      </Stack>
+      <Divider sx={{ borderColor: "rgba(255,255,255,0.08)" }} />
+
+      <List sx={{ flex: 1, py: 1.5 }}>
+        {items.map((it) => (
+          <ListItemButton
+            key={it.to}
+            component={NavLink}
+            to={it.to}
+            end={it.end}
+            selected={active(it.to, it.end)}
+            onClick={onNavigate}
+            sx={{
+              color: "#cbd5e1",
+              mb: 0.5,
+              "&.Mui-selected": { color: "#fff" },
+              "& .MuiListItemIcon-root": { color: "inherit" },
+            }}
+          >
+            <ListItemIcon sx={{ minWidth: 40 }}>{it.icon}</ListItemIcon>
+            <ListItemText
+              primary={it.label}
+              primaryTypographyProps={{ fontWeight: 600, fontSize: 14 }}
+            />
+          </ListItemButton>
+        ))}
+      </List>
+
+      <Divider sx={{ borderColor: "rgba(255,255,255,0.08)" }} />
+      <List sx={{ py: 1 }}>
+        <ListItemButton
+          onClick={() => dispatch(logout())}
+          sx={{
+            color: "#fca5a5",
+            "& .MuiListItemIcon-root": { color: "inherit" },
+          }}
+        >
+          <ListItemIcon sx={{ minWidth: 40 }}>
+            <LogoutRoundedIcon />
+          </ListItemIcon>
+          <ListItemText
+            primary="Chiqish"
+            primaryTypographyProps={{ fontWeight: 600, fontSize: 14 }}
+          />
+        </ListItemButton>
+      </List>
+    </Box>
   );
 };
 

@@ -32,6 +32,7 @@ import {
   updateAdmin,
   deleteAdmin,
 } from "../services/superAdminService";
+import { PageHeader } from "../components/ui";
 
 const emptyForm = { id: null, username: "", password: "", filial: "" };
 
@@ -150,29 +151,20 @@ const SuperAdminFilials = () => {
 
   return (
     <Box>
-      <Stack
-        direction="row"
-        justifyContent="space-between"
-        alignItems="center"
-        mb={3}
-      >
-        <Box>
-          <Typography variant="h5" sx={{ fontWeight: 700 }}>
-            Filiallar boshqaruvi
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Har bir filialga admin tayinlang. O'qituvchilar viloyati bo'yicha
-            o'z filial adminiga yo'naltiriladi.
-          </Typography>
-        </Box>
-        <Button
-          variant="contained"
-          startIcon={<AddIcon />}
-          onClick={() => openCreate()}
-        >
-          Admin qo'shish
-        </Button>
-      </Stack>
+      <PageHeader
+        title="Filiallar boshqaruvi"
+        subtitle="Har bir filialga admin tayinlang. O'qituvchilar viloyati bo'yicha o'z filial adminiga yo'naltiriladi."
+        action={
+          <Button
+            variant="contained"
+            startIcon={<AddIcon />}
+            onClick={() => openCreate()}
+          >
+            Admin qo'shish
+          </Button>
+        }
+      />
+
 
       {loading ? (
         <Box sx={{ display: "flex", justifyContent: "center", py: 8 }}>

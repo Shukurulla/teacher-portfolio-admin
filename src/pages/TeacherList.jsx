@@ -1,10 +1,33 @@
-"use client";
-
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useSearchParams } from "react-router-dom";
+import {
+  Box,
+  Card,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Typography,
+  Button,
+  Stack,
+  Avatar,
+  Chip,
+  TextField,
+  InputAdornment,
+  IconButton,
+  Tooltip,
+} from "@mui/material";
+import { alpha } from "@mui/material/styles";
+import SearchRounded from "@mui/icons-material/SearchRounded";
+import VisibilityRounded from "@mui/icons-material/VisibilityRounded";
+import DeleteOutlineRounded from "@mui/icons-material/DeleteOutlineRounded";
+import GroupsRounded from "@mui/icons-material/GroupsRounded";
+import PersonRounded from "@mui/icons-material/PersonRounded";
 import { fetchAllTeachers, removeTeacher } from "../store/slices/teacherSlice";
 import { toast } from "react-hot-toast";
+import { PageHeader, Loader, EmptyState, SoftChip } from "../components/ui";
 
 const FILIAL_NAMES = {
   Nukus: "JTSBMQTMOI Nukus Filiali",
@@ -12,6 +35,9 @@ const FILIAL_NAMES = {
   Samarqand: "JTSBMQTMOI Samarqand Filiali",
   Toshkent: "JTSBMQTMO Instituti",
 };
+
+const DEFAULT_PROFILE_IMAGE =
+  "https://as2.ftcdn.net/jpg/05/89/93/27/1000_F_589932782_vQAEAZhHnq1QCGu5ikwrYaQD0Mmurm0N.jpg";
 
 const TeacherList = () => {
   const dispatch = useDispatch();
@@ -46,148 +72,153 @@ const TeacherList = () => {
   });
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">O'qituvchilar ro'yxati</h1>
-        {filialParam && (
-          <div className="flex items-center gap-2 bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
-            <span>{FILIAL_NAMES[filialParam] || filialParam}</span>
-            <button
-              onClick={() => setSearchParams({})}
-              className="hover:text-blue-950"
-              title="Filtrni tozalash"
-            >
-              ✕
-            </button>
-          </div>
-        )}
-      </div>
+    <Box>
+      <PageHeader
+        title="O'qituvchilar ro'yxati"
+        subtitle="Barcha o'qituvchilar va ularning portfolio ma'lumotlari"
+        action={
+          !loading && (
+            <SoftChip
+              label={`${filteredTeachers?.length || 0} ta o'qituvchi`}
+              color="#2563eb"
+            />
+          )
+        }
+      />
 
-      <div className="bg-white rounded-lg shadow overflow-hidden">
-        <div className="p-4 border-b">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <div className="relative flex-1">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <svg
-                  className="h-5 w-5 text-gray-400"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </div>
-              <input
-                type="text"
-                className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-                placeholder="O'qituvchi qidirish..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-          </div>
-        </div>
+      <Card>
+        <Stack
+          direction={{ xs: "column", sm: "row" }}
+          justifyContent="space-between"
+          alignItems={{ xs: "stretch", sm: "center" }}
+          gap={2}
+          sx={{
+            px: 3,
+            py: 2,
+            borderBottom: "1px solid",
+            borderColor: "divider",
+          }}
+        >
+          <TextField
+            size="small"
+            placeholder="O'qituvchi qidirish..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            sx={{ width: { xs: "100%", sm: 340 } }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchRounded sx={{ color: "text.disabled" }} />
+                </InputAdornment>
+              ),
+            }}
+          />
+          {filialParam && (
+            <Chip
+              label={FILIAL_NAMES[filialParam] || filialParam}
+              onDelete={() => setSearchParams({})}
+              sx={{
+                bgcolor: alpha("#2563eb", 0.12),
+                color: "#2563eb",
+                fontWeight: 600,
+                "& .MuiChip-deleteIcon": {
+                  color: "#2563eb",
+                  "&:hover": { color: "#1d4ed8" },
+                },
+              }}
+            />
+          )}
+        </Stack>
 
         {loading ? (
-          <div className="p-6 text-center">
-            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500 mx-auto"></div>
-            <p className="mt-2 text-gray-500">O'qituvchilar yuklanmoqda...</p>
-          </div>
+          <Loader label="O'qituvchilar yuklanmoqda..." />
         ) : error ? (
-          <div className="p-6 text-center text-red-500">{error}</div>
+          <Box sx={{ p: 6, textAlign: "center", color: "error.main" }}>
+            <Typography variant="body2">{error}</Typography>
+          </Box>
         ) : filteredTeachers?.length === 0 ? (
-          <div className="p-6 text-center text-gray-500">
-            O'qituvchilar topilmadi
-          </div>
+          <EmptyState
+            icon={<GroupsRounded />}
+            title="O'qituvchilar topilmadi"
+            description="Qidiruv yoki filtr shartlariga mos o'qituvchi mavjud emas"
+          />
         ) : (
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    O'qituvchi
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    Telefon
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    Ish joylari
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    Yutuqlar
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    Amallar
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+          <Box sx={{ overflowX: "auto" }}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>O'qituvchi</TableCell>
+                  <TableCell>Telefon</TableCell>
+                  <TableCell>Ish joylari</TableCell>
+                  <TableCell>Yutuqlar</TableCell>
+                  <TableCell align="right">Amallar</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
                 {filteredTeachers?.map((teacher) => (
-                  <tr key={teacher._id}>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
-                        <div className="h-10 w-10 flex-shrink-0">
-                          <img
-                            className="h-10 w-10 rounded-full object-cover"
-                            src={
-                              teacher.profileImage ||
-                              "https://as2.ftcdn.net/jpg/05/89/93/27/1000_F_589932782_vQAEAZhHnq1QCGu5ikwrYaQD0Mmurm0N.jpg"
-                            }
-                            alt={`${teacher.firstName} ${teacher.lastName}`}
-                          />
-                        </div>
-                        <div className="ml-4">
-                          <div className="text-sm font-medium text-gray-900">
-                            {teacher.firstName} {teacher.lastName}
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <TableRow key={teacher._id} hover>
+                    <TableCell>
+                      <Stack direction="row" alignItems="center" spacing={2}>
+                        <Avatar
+                          src={teacher.profileImage || DEFAULT_PROFILE_IMAGE}
+                          alt={`${teacher.firstName} ${teacher.lastName}`}
+                          sx={{ width: 40, height: 40 }}
+                        >
+                          <PersonRounded />
+                        </Avatar>
+                        <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                          {teacher.firstName} {teacher.lastName}
+                        </Typography>
+                      </Stack>
+                    </TableCell>
+                    <TableCell
+                      sx={{ color: "text.secondary", whiteSpace: "nowrap" }}
+                    >
                       {teacher.phone}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {teacher.jobsCount || 0}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {teacher.achievementsCount || 0}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                      <Link
-                        to={`/teachers/${teacher._id}`}
-                        className="text-blue-600 hover:text-blue-900 mr-4"
+                    </TableCell>
+                    <TableCell>
+                      <SoftChip label={teacher.jobsCount || 0} color="#2563eb" />
+                    </TableCell>
+                    <TableCell>
+                      <SoftChip
+                        label={teacher.achievementsCount || 0}
+                        color="#7c3aed"
+                      />
+                    </TableCell>
+                    <TableCell align="right">
+                      <Stack
+                        direction="row"
+                        spacing={1}
+                        justifyContent="flex-end"
                       >
-                        Ko'rish
-                      </Link>
-                    </td>
-                  </tr>
+                        <Button
+                          size="small"
+                          variant="outlined"
+                          startIcon={<VisibilityRounded />}
+                          component={Link}
+                          to={`/teachers/${teacher._id}`}
+                        >
+                          Ko'rish
+                        </Button>
+                        <Tooltip title="O'chirish">
+                          <IconButton
+                            size="small"
+                            color="error"
+                            onClick={() => handleDelete(teacher._id)}
+                          >
+                            <DeleteOutlineRounded fontSize="small" />
+                          </IconButton>
+                        </Tooltip>
+                      </Stack>
+                    </TableCell>
+                  </TableRow>
                 ))}
-              </tbody>
-            </table>
-          </div>
+              </TableBody>
+            </Table>
+          </Box>
         )}
-      </div>
-    </div>
+      </Card>
+    </Box>
   );
 };
 

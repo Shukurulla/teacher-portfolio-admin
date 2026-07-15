@@ -3,7 +3,34 @@
 import { useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import {
+  Box,
+  Card,
+  CardContent,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Typography,
+  Button,
+  Stack,
+  Alert,
+} from "@mui/material";
+import { alpha } from "@mui/material/styles";
+import ArrowBackRounded from "@mui/icons-material/ArrowBackRounded";
+import WorkRounded from "@mui/icons-material/WorkRounded";
+import EmojiEventsRounded from "@mui/icons-material/EmojiEventsRounded";
+import VisibilityRounded from "@mui/icons-material/VisibilityRounded";
+import SchoolRounded from "@mui/icons-material/SchoolRounded";
 import { fetchJobById, clearCurrentJob } from "../store/slices/jobSlice";
+import {
+  PageHeader,
+  StatusChip,
+  SoftChip,
+  Loader,
+  EmptyState,
+} from "../components/ui";
 
 const JobDetail = () => {
   const { teacherId, jobId } = useParams();
@@ -21,176 +48,184 @@ const JobDetail = () => {
     };
   }, [dispatch, jobId]);
 
+  const BackButton = (
+    <Button
+      startIcon={<ArrowBackRounded />}
+      onClick={() => navigate(`/teachers/${teacherId}`)}
+      color="inherit"
+      sx={{ mb: 2, color: "text.secondary" }}
+    >
+      Orqaga
+    </Button>
+  );
+
   if (loading && !currentJob) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-      </div>
-    );
+    return <Loader label="Ma'lumotlar yuklanmoqda..." />;
   }
 
   if (error) {
     return (
-      <div
-        className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
-        role="alert"
-      >
-        <strong className="font-bold">Xatolik!</strong>
-        <span className="block sm:inline"> {error}</span>
-      </div>
+      <Box>
+        {BackButton}
+        <Alert severity="error">{error}</Alert>
+      </Box>
     );
   }
 
   if (!currentJob) {
     return (
-      <div
-        className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative"
-        role="alert"
-      >
-        <strong className="font-bold">Diqqat!</strong>
-        <span className="block sm:inline"> Ish joyi topilmadi.</span>
-      </div>
+      <Box>
+        {BackButton}
+        <Alert severity="warning">Ish joyi topilmadi.</Alert>
+      </Box>
     );
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center">
-          <button
-            onClick={() => navigate(`/teachers/${teacherId}`)}
-            className="mr-4 text-blue-500 hover:text-blue-700"
-          >
-            ← Orqaga
-          </button>
-          <h1 className="text-2xl font-bold">Ish joyi ma'lumotlari</h1>
-        </div>
-      </div>
+    <Box>
+      {BackButton}
 
-      <div className="bg-white rounded-lg shadow overflow-hidden">
-        <div className="p-6">
-          <h2 className="text-xl font-semibold">{currentJob.title}</h2>
-          <p className="text-gray-600 mt-2">
-            <span className="font-medium">Ish joyi:</span>{" "}
-            {currentJob.workplace}
-          </p>
-          <p className="text-gray-600 mt-2">
-            <span className="font-medium">Qo'shilgan sana:</span>{" "}
-            {new Date(currentJob.createdAt).toLocaleDateString("uz-UZ")}
-          </p>
-        </div>
-      </div>
+      <PageHeader
+        title="Ish joyi ma'lumotlari"
+        subtitle={currentJob.title}
+      />
 
-      <div className="bg-white rounded-lg shadow overflow-hidden">
-        <div className="px-6 py-4 border-b">
-          <h2 className="font-semibold text-lg">Yuborilgan fayllar</h2>
-        </div>
+      <Card sx={{ mb: 3 }}>
+        <CardContent sx={{ p: { xs: 2.5, sm: 3 } }}>
+          <Stack direction="row" spacing={2.5} alignItems="flex-start">
+            <Box
+              sx={{
+                width: 52,
+                height: 52,
+                borderRadius: 3,
+                display: "grid",
+                placeItems: "center",
+                bgcolor: alpha("#2563eb", 0.12),
+                color: "#2563eb",
+                flexShrink: 0,
+              }}
+            >
+              <WorkRounded />
+            </Box>
+            <Box sx={{ minWidth: 0 }}>
+              <Typography variant="h6">{currentJob.title}</Typography>
+              <Stack
+                direction={{ xs: "column", sm: "row" }}
+                spacing={{ xs: 0.75, sm: 3 }}
+                mt={1.25}
+              >
+                <Stack direction="row" spacing={1} alignItems="center">
+                  <SchoolRounded
+                    sx={{ fontSize: 18, color: "text.secondary" }}
+                  />
+                  <Typography variant="body2" color="text.secondary">
+                    <Box component="span" sx={{ fontWeight: 600 }}>
+                      Ish joyi:
+                    </Box>{" "}
+                    {currentJob.workplace}
+                  </Typography>
+                </Stack>
+                <Typography variant="body2" color="text.secondary">
+                  <Box component="span" sx={{ fontWeight: 600 }}>
+                    Qo'shilgan sana:
+                  </Box>{" "}
+                  {new Date(currentJob.createdAt).toLocaleDateString("uz-UZ")}
+                </Typography>
+              </Stack>
+            </Box>
+          </Stack>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          sx={{ px: 3, py: 2, borderBottom: "1px solid", borderColor: "divider" }}
+        >
+          <Typography variant="h6">Yuborilgan fayllar</Typography>
+          <SoftChip label={jobFiles?.length || 0} />
+        </Stack>
 
         {loading ? (
-          <div className="p-6 text-center">
-            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500 mx-auto"></div>
-            <p className="mt-2 text-gray-500">Fayllar yuklanmoqda...</p>
-          </div>
+          <Loader label="Fayllar yuklanmoqda..." />
         ) : jobFiles?.length === 0 ? (
-          <div className="p-6 text-center text-gray-500">
-            Fayllar mavjud emas
-          </div>
+          <EmptyState
+            icon={<EmojiEventsRounded />}
+            title="Fayllar mavjud emas"
+            description="Bu ish joyi bo'yicha hali hujjat yuborilmagan"
+          />
         ) : (
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    Yutuq
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    Bo'lim
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    Ball
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    Holat
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    Sana
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    Amallar
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {jobFiles?.map((file) => (
-                  <tr key={file._id}>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900">
+          <Box sx={{ overflowX: "auto" }}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Yutuq</TableCell>
+                  <TableCell>Bo'lim</TableCell>
+                  <TableCell>Ball</TableCell>
+                  <TableCell>Holat</TableCell>
+                  <TableCell>Sana</TableCell>
+                  <TableCell align="right">Amallar</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {jobFiles?.map((file) => {
+                  const ball =
+                    file.files?.reduce(
+                      (sum, f) => sum + (f.rating?.rating || 0),
+                      0
+                    ) || "-";
+                  return (
+                    <TableRow
+                      key={file._id}
+                      hover
+                      sx={{ cursor: "pointer" }}
+                      onClick={() => navigate(`/files/${file._id}`)}
+                    >
+                      <TableCell sx={{ fontWeight: 600 }}>
                         {file.achievments.title}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">
+                      </TableCell>
+                      <TableCell sx={{ color: "text.secondary" }}>
                         {file.achievments.section}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">
-                        {file.files?.reduce(
-                          (sum, f) => sum + (f.rating?.rating || 0),
-                          0
-                        ) || "-"}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span
-                        className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                          file.status === "Tasdiqlandi"
-                            ? "bg-green-100 text-green-800"
-                            : file.status === "Tasdiqlanmadi"
-                            ? "bg-red-100 text-red-800"
-                            : "bg-yellow-100 text-yellow-800"
-                        }`}
+                      </TableCell>
+                      <TableCell>
+                        {ball === "-" ? (
+                          <Typography variant="body2" color="text.secondary">
+                            —
+                          </Typography>
+                        ) : (
+                          <SoftChip label={ball} color="#7c3aed" />
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        <StatusChip status={file.status} />
+                      </TableCell>
+                      <TableCell
+                        sx={{ color: "text.secondary", whiteSpace: "nowrap" }}
                       >
-                        {file.status}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {new Date(file.createdAt).toLocaleDateString("uz-UZ")}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                      <Link
-                        to={`/files/${file._id}`}
-                        className="text-blue-600 hover:text-blue-900"
-                      >
-                        Ko'rish
-                      </Link>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                        {new Date(file.createdAt).toLocaleDateString("uz-UZ")}
+                      </TableCell>
+                      <TableCell align="right">
+                        <Button
+                          component={Link}
+                          to={`/files/${file._id}`}
+                          size="small"
+                          startIcon={<VisibilityRounded />}
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          Ko'rish
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </Box>
         )}
-      </div>
-    </div>
+      </Card>
+    </Box>
   );
 };
 

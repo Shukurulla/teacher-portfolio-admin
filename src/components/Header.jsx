@@ -1,92 +1,115 @@
-"use client";
-
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import {
+  AppBar,
+  Toolbar,
+  IconButton,
+  Typography,
+  Box,
+  Avatar,
+  Menu,
+  MenuItem,
+  ListItemIcon,
+  Divider,
+} from "@mui/material";
+import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
+import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import { logout } from "../store/slices/authSlice";
 
-const Header = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { admin } = useSelector((state) => state.auth);
-  const dispatch = useDispatch();
+const TITLES = {
+  "/": "Bosh sahifa",
+  "/filials": "Filiallar boshqaruvi",
+  "/teachers": "O'qituvchilar",
+  "/new-files": "Yangi hujjatlar",
+  "/approved": "Tasdiqlangan hujjatlar",
+  "/rejected": "Rad etilgan hujjatlar",
+};
 
-  const handleLogout = () => {
-    dispatch(logout());
-  };
+const titleFor = (pathname) => {
+  if (TITLES[pathname]) return TITLES[pathname];
+  if (pathname.startsWith("/teachers")) return "O'qituvchi ma'lumotlari";
+  if (pathname.startsWith("/files")) return "Hujjat ma'lumotlari";
+  return "Admin panel";
+};
+
+const Header = ({ onMenuClick, drawerWidth }) => {
+  const { admin } = useSelector((s) => s.auth);
+  const dispatch = useDispatch();
+  const { pathname } = useLocation();
+  const [anchor, setAnchor] = useState(null);
+  const roleLabel =
+    admin?.role === "superadmin" ? "Super admin" : "Filial admin";
 
   return (
-    <header className="bg-white shadow-sm z-10">
-      <div className="flex items-center justify-between px-4 py-3">
-        <div className="flex items-center md:hidden">
-          <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="text-gray-500 hover:text-gray-600 focus:outline-none focus:text-gray-600"
-          >
-            <svg className="h-6 w-6 fill-current" viewBox="0 0 24 24">
-              {isMenuOpen ? (
-                <path
-                  fillRule="evenodd"
-                  clipRule="evenodd"
-                  d="M18.278 16.864a1 1 0 0 1-1.414 1.414l-4.829-4.828-4.828 4.828a1 1 0 0 1-1.414-1.414l4.828-4.829-4.828-4.828a1 1 0 0 1 1.414-1.414l4.829 4.828 4.828-4.828a1 1 0 1 1 1.414 1.414l-4.828 4.829 4.828 4.828z"
-                />
-              ) : (
-                <path
-                  fillRule="evenodd"
-                  d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z"
-                />
-              )}
-            </svg>
-          </button>
-        </div>
+    <AppBar
+      position="fixed"
+      sx={{
+        width: { md: `calc(100% - ${drawerWidth}px)` },
+        ml: { md: `${drawerWidth}px` },
+      }}
+    >
+      <Toolbar sx={{ gap: 1 }}>
+        <IconButton
+          edge="start"
+          onClick={onMenuClick}
+          sx={{ display: { md: "none" } }}
+        >
+          <MenuRoundedIcon />
+        </IconButton>
+        <Typography variant="h6" sx={{ flex: 1 }} noWrap>
+          {titleFor(pathname)}
+        </Typography>
 
-        <div className="flex-1 flex justify-center md:justify-start">
-          <div className="md:hidden">
-            <span className="text-lg font-semibold text-blue-800">
-              Admin Panel
-            </span>
-          </div>
-        </div>
+        <Box
+          onClick={(e) => setAnchor(e.currentTarget)}
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 1.25,
+            cursor: "pointer",
+            px: 1,
+            py: 0.5,
+            borderRadius: 2,
+            "&:hover": { bgcolor: "action.hover" },
+          }}
+        >
+          <Avatar sx={{ bgcolor: "primary.main", width: 36, height: 36, fontSize: 15 }}>
+            {admin?.username?.[0]?.toUpperCase() || "A"}
+          </Avatar>
+          <Box sx={{ display: { xs: "none", sm: "block" }, textAlign: "left" }}>
+            <Typography variant="body2" sx={{ fontWeight: 600, lineHeight: 1.1 }}>
+              {admin?.username || "Admin"}
+            </Typography>
+            <Typography variant="caption" color="text.secondary">
+              {roleLabel}
+            </Typography>
+          </Box>
+        </Box>
 
-        <div className="flex items-center">
-          <div className="relative">
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="flex items-center focus:outline-none"
-            >
-              <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white">
-                {admin?.username?.charAt(0).toUpperCase() || "A"}
-              </div>
-              <span className="ml-2 text-sm font-medium text-gray-700 hidden md:block">
-                {admin?.username || "Admin"}
-              </span>
-            </button>
-
-            {isMenuOpen && (
-              <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
-                <Link
-                  to="/"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                >
-                  Bosh sahifa
-                </Link>
-                <Link
-                  to="/teachers"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 md:hidden"
-                >
-                  O'qituvchilar
-                </Link>
-                <button
-                  onClick={handleLogout}
-                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                >
-                  Chiqish
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-    </header>
+        <Menu
+          anchorEl={anchor}
+          open={!!anchor}
+          onClose={() => setAnchor(null)}
+          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+          transformOrigin={{ vertical: "top", horizontal: "right" }}
+        >
+          <Box sx={{ px: 2, py: 1 }}>
+            <Typography variant="subtitle2">{admin?.username}</Typography>
+            <Typography variant="caption" color="text.secondary">
+              {roleLabel}
+            </Typography>
+          </Box>
+          <Divider />
+          <MenuItem onClick={() => dispatch(logout())}>
+            <ListItemIcon>
+              <LogoutRoundedIcon fontSize="small" />
+            </ListItemIcon>
+            Chiqish
+          </MenuItem>
+        </Menu>
+      </Toolbar>
+    </AppBar>
   );
 };
 

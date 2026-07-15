@@ -1,39 +1,59 @@
-"use client";
-
-import { useEffect } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useState, useEffect } from "react";
+import { Outlet } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { Box, Drawer, Toolbar } from "@mui/material";
 import { fetchAdminProfile } from "../store/slices/authSlice";
 import { Header, Sidebar } from "../components";
 
+const DRAWER = 264;
+
 const AdminLayout = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const { admin, loading } = useSelector((state) => state.auth);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    // Admin profilini olish
     dispatch(fetchAdminProfile());
   }, [dispatch]);
 
-  if (loading && !admin) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-      </div>
-    );
-  }
-
   return (
-    <div className="flex h-screen bg-gray-100">
-      <Sidebar />
-      <div className="flex flex-col flex-1 overflow-hidden">
-        <Header />
-        <main className="flex-1 overflow-y-auto p-4">
+    <Box sx={{ display: "flex", minHeight: "100vh", bgcolor: "background.default" }}>
+      <Header onMenuClick={() => setMobileOpen(true)} drawerWidth={DRAWER} />
+
+      <Box component="nav" sx={{ width: { md: DRAWER }, flexShrink: { md: 0 } }}>
+        <Drawer
+          variant="temporary"
+          open={mobileOpen}
+          onClose={() => setMobileOpen(false)}
+          ModalProps={{ keepMounted: true }}
+          sx={{
+            display: { xs: "block", md: "none" },
+            "& .MuiDrawer-paper": { width: DRAWER, border: 0 },
+          }}
+        >
+          <Sidebar onNavigate={() => setMobileOpen(false)} />
+        </Drawer>
+        <Drawer
+          variant="permanent"
+          open
+          sx={{
+            display: { xs: "none", md: "block" },
+            "& .MuiDrawer-paper": { width: DRAWER, border: 0 },
+          }}
+        >
+          <Sidebar />
+        </Drawer>
+      </Box>
+
+      <Box
+        component="main"
+        sx={{ flexGrow: 1, width: { md: `calc(100% - ${DRAWER}px)` }, minWidth: 0 }}
+      >
+        <Toolbar />
+        <Box sx={{ p: { xs: 2, md: 3 } }}>
           <Outlet />
-        </main>
-      </div>
-    </div>
+        </Box>
+      </Box>
+    </Box>
   );
 };
 
