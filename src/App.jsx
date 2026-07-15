@@ -17,6 +17,9 @@ import {
   TeacherList,
   TeacterDetail,
   SuperAdminFilials,
+  SpecialReview,
+  MalakaList,
+  Criteria,
 } from "./pages";
 import { ProtectedRoute } from "./components";
 
@@ -50,6 +53,9 @@ function App() {
             <Route path="/new-files" element={<NewAchievementsPage />} />
             <Route path="/approved" element={<ApprovedFilesPage />} />
             <Route path="/rejected" element={<RejectedFilesPage />} />
+            <Route path="/special-review" element={<SpecialReview />} />
+            <Route path="/malaka" element={<MalakaList />} />
+            <Route path="/criteria" element={<Criteria />} />
           </Route>
 
           <Route path="*" element={<NotFound />} />

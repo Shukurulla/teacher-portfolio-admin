@@ -19,6 +19,8 @@ import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import SchoolRoundedIcon from "@mui/icons-material/SchoolRounded";
+import WorkspacePremiumRoundedIcon from "@mui/icons-material/WorkspacePremiumRounded";
+import AssessmentRoundedIcon from "@mui/icons-material/AssessmentRounded";
 import { logout } from "../store/slices/authSlice";
 
 const Sidebar = ({ onNavigate }) => {
@@ -36,6 +38,9 @@ const Sidebar = ({ onNavigate }) => {
     { to: "/new-files", label: "Yangi hujjatlar", icon: <InboxRoundedIcon /> },
     { to: "/approved", label: "Tasdiqlangan", icon: <CheckCircleRoundedIcon /> },
     { to: "/rejected", label: "Rad etilgan", icon: <CancelRoundedIcon /> },
+    { to: "/special-review", label: "Maxsus yutuqlar", icon: <WorkspacePremiumRoundedIcon /> },
+    { to: "/malaka", label: "Malaka oshirish", icon: <SchoolRoundedIcon /> },
+    { to: "/criteria", label: "Baholash mezoni", icon: <AssessmentRoundedIcon /> },
   ];
 
   const active = (to, end) =>
