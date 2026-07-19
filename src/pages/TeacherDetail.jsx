@@ -22,6 +22,8 @@ import PlaceRounded from "@mui/icons-material/PlaceRounded";
 import WorkRounded from "@mui/icons-material/WorkRounded";
 import EmojiEventsRounded from "@mui/icons-material/EmojiEventsRounded";
 import VisibilityRounded from "@mui/icons-material/VisibilityRounded";
+import VerifiedRounded from "@mui/icons-material/VerifiedRounded";
+import CalendarMonthRounded from "@mui/icons-material/CalendarMonthRounded";
 import {
   fetchTeacherById,
   fetchTeacherJobs,
@@ -32,6 +34,13 @@ import { formatDate, formatPhone } from "../utils/format";
 
 const FALLBACK_IMAGE =
   "https://as2.ftcdn.net/jpg/05/89/93/27/1000_F_589932782_vQAEAZhHnq1QCGu5ikwrYaQD0Mmurm0N.jpg";
+
+const FILIAL_NAMES = {
+  Nukus: "JTSBMQTMOI Nukus Filiali",
+  Fargʻona: "JTSBMQTMOI Fargʻona Filiali",
+  Samarqand: "JTSBMQTMOI Samarqand Filiali",
+  Toshkent: "JTSBMQTMO Instituti",
+};
 
 // Ikonка + matn juftligi (profil ma'lumotlari uchun)
 const InfoRow = ({ icon, children }) => (
@@ -159,7 +168,7 @@ const TeacherDetail = () => {
       <Box
         sx={{
           display: "grid",
-          gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
+          gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr", lg: "repeat(4, 1fr)" },
           gap: 2.5,
           mb: 3,
         }}
@@ -176,7 +185,82 @@ const TeacherDetail = () => {
           value={currentTeacher.achievementsCount || 0}
           color="#d97706"
         />
+        <StatCard
+          icon={<VerifiedRounded />}
+          label="Maxsus yutuq"
+          value={currentTeacher.hasSpecial ? "Bor" : "Yo'q"}
+          color={currentTeacher.hasSpecial ? "#16a34a" : "#64748b"}
+        />
+        <StatCard
+          icon={<EmojiEventsRounded />}
+          label="Jami ball"
+          value={currentTeacher.totalPoints || 0}
+          color="#7c3aed"
+        />
       </Box>
+
+      <Card sx={{ mb: 3 }}>
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          sx={{ px: 3, py: 2, borderBottom: "1px solid", borderColor: "divider" }}
+        >
+          <Typography variant="h6">Malaka oshirish rejasi</Typography>
+        </Stack>
+
+        {currentTeacher.nextMalaka ? (
+          <CardContent>
+            <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+              <Box
+                sx={{
+                  width: 52,
+                  height: 52,
+                  borderRadius: 2.5,
+                  display: "grid",
+                  placeItems: "center",
+                  bgcolor: alpha("#2563eb", 0.12),
+                  color: "#2563eb",
+                  flexShrink: 0,
+                }}
+              >
+                <CalendarMonthRounded />
+              </Box>
+              <Box sx={{ minWidth: 0 }}>
+                <Typography variant="subtitle1">
+                  {formatDate(currentTeacher.nextMalaka.date)}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {FILIAL_NAMES[currentTeacher.nextMalaka.filial] ||
+                    currentTeacher.nextMalaka.filial ||
+                    "Filial ko'rsatilmagan"}
+                </Typography>
+                {currentTeacher.nextMalaka.province && (
+                  <Typography variant="body2" color="text.secondary">
+                    {currentTeacher.nextMalaka.province}
+                  </Typography>
+                )}
+                {currentTeacher.nextMalaka.direction && (
+                  <Typography
+                    variant="caption"
+                    color="text.secondary"
+                    display="block"
+                    sx={{ mt: 1, lineHeight: 1.45 }}
+                  >
+                    {currentTeacher.nextMalaka.direction}
+                  </Typography>
+                )}
+              </Box>
+            </Stack>
+          </CardContent>
+        ) : (
+          <EmptyState
+            icon={<CalendarMonthRounded />}
+            title="Malaka rejasi yo'q"
+            description="Bu o'qituvchi hali malaka oshirish sanasini kiritmagan"
+          />
+        )}
+      </Card>
 
       {/* Ish joylari ro'yxati */}
       <Card>

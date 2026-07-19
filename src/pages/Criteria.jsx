@@ -18,6 +18,7 @@ import { toast } from "react-hot-toast";
 import { getTeachers, getSpecialAll } from "../services/phase2Service";
 import { PageHeader, StatCard, Loader, EmptyState, SoftChip } from "../components/ui";
 import { TeacherCell } from "../components";
+import { formatDate } from "../utils/format";
 
 const FILIAL_NAMES = {
   Nukus: "Nukus Filiali",
@@ -87,7 +88,7 @@ const Criteria = () => {
 
   const withCat = teachers.map((t) => {
     const tp = t.totalPoints || 0;
-    const hasSpecial = specialSet.has(t._id?.toString());
+    const hasSpecial = t.hasSpecial || specialSet.has(t._id?.toString());
     return { ...t, tp, hasSpecial, cat: categoryOf(tp, hasSpecial) };
   });
   const countOf = (k) => withCat.filter((t) => t.cat === k).length;
@@ -158,7 +159,10 @@ const Criteria = () => {
                     <TableRow>
                       <TableCell>O'qituvchi</TableCell>
                       <TableCell>Filial</TableCell>
+                      <TableCell>Viloyat</TableCell>
+                      <TableCell align="center">Yutuqlar</TableCell>
                       <TableCell align="center">Maxsus yutuq</TableCell>
+                      <TableCell>Malaka rejasi</TableCell>
                       <TableCell align="center">Jami ball</TableCell>
                     </TableRow>
                   </TableHead>
@@ -176,12 +180,46 @@ const Criteria = () => {
                         <TableCell sx={{ color: "text.secondary" }}>
                           {FILIAL_NAMES[t.region?.region] || t.region?.region || "—"}
                         </TableCell>
+                        <TableCell sx={{ color: "text.secondary", minWidth: 160 }}>
+                          {t.region?.title || "—"}
+                        </TableCell>
+                        <TableCell align="center">
+                          <Typography sx={{ fontWeight: 700 }}>
+                            {t.achievementsCount || 0}
+                          </Typography>
+                        </TableCell>
                         <TableCell align="center">
                           {t.hasSpecial ? (
                             <SoftChip label="Bor" color="#16a34a" />
                           ) : (
                             <Typography variant="body2" color="text.disabled">
                               —
+                            </Typography>
+                          )}
+                        </TableCell>
+                        <TableCell sx={{ minWidth: 260, maxWidth: 360 }}>
+                          {t.nextMalaka ? (
+                            <Box>
+                              <Typography variant="body2" sx={{ fontWeight: 700 }}>
+                                {formatDate(t.nextMalaka.date)}
+                              </Typography>
+                              <Typography variant="caption" color="text.secondary">
+                                {t.nextMalaka.province || "Viloyat ko'rsatilmagan"}
+                              </Typography>
+                              {t.nextMalaka.direction && (
+                                <Typography
+                                  variant="caption"
+                                  color="text.secondary"
+                                  display="block"
+                                  sx={{ mt: 0.5, lineHeight: 1.35 }}
+                                >
+                                  {t.nextMalaka.direction}
+                                </Typography>
+                              )}
+                            </Box>
+                          ) : (
+                            <Typography variant="body2" color="text.disabled">
+                              Reja yo'q
                             </Typography>
                           )}
                         </TableCell>

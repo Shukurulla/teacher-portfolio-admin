@@ -29,7 +29,7 @@ function App() {
   return (
     <Provider store={store}>
       <Router>
-        <Toaster position="top-right" />
+        <Toaster position="top-center" />
         <Routes>
           <Route path="/login" element={<Login />} />
 

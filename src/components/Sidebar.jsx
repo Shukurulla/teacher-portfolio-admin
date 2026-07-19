@@ -30,17 +30,34 @@ const Sidebar = ({ onNavigate }) => {
   const isSuper = admin?.role === "superadmin";
 
   const items = [
-    { to: "/", label: "Bosh sahifa", icon: <DashboardRoundedIcon />, end: true },
+    {
+      to: "/",
+      label: "Bosh sahifa",
+      icon: <DashboardRoundedIcon />,
+      end: true,
+    },
     ...(isSuper
       ? [{ to: "/filials", label: "Filiallar", icon: <ApartmentRoundedIcon /> }]
       : []),
     { to: "/teachers", label: "O'qituvchilar", icon: <GroupsRoundedIcon /> },
     { to: "/new-files", label: "Yangi hujjatlar", icon: <InboxRoundedIcon /> },
-    { to: "/approved", label: "Tasdiqlangan", icon: <CheckCircleRoundedIcon /> },
+    {
+      to: "/approved",
+      label: "Tasdiqlangan",
+      icon: <CheckCircleRoundedIcon />,
+    },
     { to: "/rejected", label: "Rad etilgan", icon: <CancelRoundedIcon /> },
-    { to: "/special-review", label: "Maxsus yutuqlar", icon: <WorkspacePremiumRoundedIcon /> },
+    {
+      to: "/special-review",
+      label: "Maxsus yutuqlar",
+      icon: <WorkspacePremiumRoundedIcon />,
+    },
     { to: "/malaka", label: "Malaka oshirish", icon: <SchoolRoundedIcon /> },
-    { to: "/criteria", label: "Baholash mezoni", icon: <AssessmentRoundedIcon /> },
+    {
+      to: "/criteria",
+      label: "Baholash natijalari",
+      icon: <AssessmentRoundedIcon />,
+    },
   ];
 
   const active = (to, end) =>
@@ -56,7 +73,12 @@ const Sidebar = ({ onNavigate }) => {
         background: "linear-gradient(180deg,#0f172a 0%,#1e293b 100%)",
       }}
     >
-      <Stack direction="row" alignItems="center" gap={1.5} sx={{ px: 2.5, py: 2.75 }}>
+      <Stack
+        direction="row"
+        alignItems="center"
+        gap={1.5}
+        sx={{ px: 2.5, py: 2.75 }}
+      >
         <Avatar sx={{ bgcolor: "primary.main", width: 42, height: 42 }}>
           <SchoolRoundedIcon />
         </Avatar>
