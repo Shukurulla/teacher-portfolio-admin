@@ -88,6 +88,7 @@ const SpecialReview = () => {
         title="Maxsus yutuqlar (19-band)"
         subtitle="O'qituvchilar yuborgan maxsus yutuq hujjatlarini tasdiqlang"
         action={<SoftChip label={`${pending} ta yangi`} color="#d97706" />}
+        style={{ marginBottom: "20px" }}
       />
 
       <Card>
