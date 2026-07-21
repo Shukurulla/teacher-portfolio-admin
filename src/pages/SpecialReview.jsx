@@ -23,7 +23,13 @@ import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
 import { toast } from "react-hot-toast";
 import { getSpecialAll, reviewSpecial } from "../services/phase2Service";
-import { PageHeader, StatusChip, Loader, EmptyState, SoftChip } from "../components/ui";
+import {
+  PageHeader,
+  StatusChip,
+  Loader,
+  EmptyState,
+  SoftChip,
+} from "../components/ui";
 import { TeacherCell } from "../components";
 import { formatDate } from "../utils/format";
 
@@ -79,7 +85,7 @@ const SpecialReview = () => {
   return (
     <Box>
       <PageHeader
-        title="Maxsus yutuqlar (18-band)"
+        title="Maxsus yutuqlar (19-band)"
         subtitle="O'qituvchilar yuborgan maxsus yutuq hujjatlarini tasdiqlang"
         action={<SoftChip label={`${pending} ta yangi`} color="#d97706" />}
       />
@@ -118,14 +124,20 @@ const SpecialReview = () => {
                     <TableCell sx={{ maxWidth: 380 }}>
                       <Typography variant="body2">{r.itemTitle}</Typography>
                     </TableCell>
-                    <TableCell sx={{ color: "text.secondary", whiteSpace: "nowrap" }}>
+                    <TableCell
+                      sx={{ color: "text.secondary", whiteSpace: "nowrap" }}
+                    >
                       {formatDate(r.createdAt)}
                     </TableCell>
                     <TableCell>
                       <StatusChip status={r.status} />
                     </TableCell>
                     <TableCell align="right">
-                      <Button size="small" variant="outlined" onClick={() => open(r)}>
+                      <Button
+                        size="small"
+                        variant="outlined"
+                        onClick={() => open(r)}
+                      >
                         {r.status === "Tekshirilmoqda" ? "Baholash" : "Ko'rish"}
                       </Button>
                     </TableCell>
@@ -137,14 +149,23 @@ const SpecialReview = () => {
         )}
       </Card>
 
-      <Dialog open={!!dialog} onClose={() => setDialog(null)} fullWidth maxWidth="sm">
+      <Dialog
+        open={!!dialog}
+        onClose={() => setDialog(null)}
+        fullWidth
+        maxWidth="sm"
+      >
         {dialog && (
           <>
             <DialogTitle>Maxsus yutuqni baholash</DialogTitle>
             <DialogContent>
               <Stack spacing={2} sx={{ mt: 1 }}>
                 <Box>
-                  <Typography variant="caption" color="text.secondary" sx={{ display: "block", mb: 0.5 }}>
+                  <Typography
+                    variant="caption"
+                    color="text.secondary"
+                    sx={{ display: "block", mb: 0.5 }}
+                  >
                     O'qituvchi
                   </Typography>
                   <TeacherCell
@@ -171,7 +192,11 @@ const SpecialReview = () => {
                 </Button>
                 <Divider />
                 <Box>
-                  <Typography variant="caption" color="text.secondary" sx={{ mb: 0.5, display: "block" }}>
+                  <Typography
+                    variant="caption"
+                    color="text.secondary"
+                    sx={{ mb: 0.5, display: "block" }}
+                  >
                     Joriy holat
                   </Typography>
                   <StatusChip status={dialog.status} />
