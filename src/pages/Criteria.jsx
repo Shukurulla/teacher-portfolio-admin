@@ -409,11 +409,19 @@ const Criteria = () => {
   }
 
   const countOf = (k) => {
+    if (k === 1) {
+      // Muqobil shakl: 85+ ball YOKI maxsus yutuq
+      return filtered.filter((t) => t.cat === 1).length;
+    }
     if (k === 4) {
       // Maxsus yutuqlari borlar (alohida ko'rish uchun)
       return filtered.filter((t) => t.hasSpecial).length;
     }
-    // Boshqa kategoriyalar o'z cat qiymati bo'yicha
+    if (k === 2) {
+      // Attestatsiyadan ozod: 56-84 ball YOKI maxsus yutuq
+      return filtered.filter((t) => t.cat === 2 || t.hasSpecial).length;
+    }
+    // Yetarli emas: 0-55 ball (maxsus yutuqsiz)
     return filtered.filter((t) => t.cat === k).length;
   };
 
@@ -421,6 +429,8 @@ const Criteria = () => {
   const filteredByCategory =
     activeCat.key === 4
       ? filtered.filter((t) => t.hasSpecial).sort((a, b) => b.tp - a.tp)
+      : activeCat.key === 2
+      ? filtered.filter((t) => t.cat === 2 || t.hasSpecial).sort((a, b) => b.tp - a.tp)
       : filtered
           .filter((t) => t.cat === activeCat.key)
           .sort((a, b) => b.tp - a.tp);
