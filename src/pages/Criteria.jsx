@@ -49,6 +49,14 @@ const CATS = [
   },
   {
     key: 2,
+    label: "Maxsus yutuqlari borlar",
+    short: "Maxsus yutuqlar",
+    desc: "Maxsus yutuqi tasdiqlangan",
+    color: "#7c3aed",
+    icon: <WorkspacePremiumRoundedIcon />,
+  },
+  {
+    key: 3,
     label: "Yakuniy attestatsiyadan ozod qilinganlar",
     short: "Attestatsiyadan ozod",
     desc: "56 – 84 ball",
@@ -56,7 +64,7 @@ const CATS = [
     icon: <VerifiedRoundedIcon />,
   },
   {
-    key: 3,
+    key: 4,
     label: "Yetarli ball to'play olmaganlar",
     short: "Yetarli emas",
     desc: "56 balldan kam",
@@ -107,85 +115,226 @@ const provinces = [
 // O'zbekiston tumanlari
 const DISTRICTS = {
   "Toshkent shahri": [
-    "Bektemir tumani", "Chilonzor tumani", "Mirobod tumani", "Mirzo Ulug'bek tumani",
-    "Olmazor tumani", "Sergeli tumani", "Shayxontohur tumani", "Uchtepa tumani",
-    "Yashnobod tumani", "Yakkasaroy tumani", "Yunusobod tumani",
+    "Bektemir tumani",
+    "Chilonzor tumani",
+    "Mirobod tumani",
+    "Mirzo Ulug'bek tumani",
+    "Olmazor tumani",
+    "Sergeli tumani",
+    "Shayxontohur tumani",
+    "Uchtepa tumani",
+    "Yashnobod tumani",
+    "Yakkasaroy tumani",
+    "Yunusobod tumani",
   ],
   "Toshkent viloyati": [
-    "Angren shahri", "Bekobod shahri", "Chirchiq shahri", "Nurafshon shahri",
-    "Olmaliq shahri", "Ohangaron shahri", "Yangiyoʻl shahri", "Akkurgan tumani",
-    "Bekobod tumani", "Boʻka tumani", "Boʻstonliq tumani", "Chinoz tumani",
-    "Oʻrtachirchiq tumani", "Ohangaron tumani", "Parkent tumani", "Piskent tumani",
-    "Qibray tumani", "Quyichirchiq tumani", "Toshkent tumani", "Yangiyo'l tumani",
-    "Yuqorichirchiq tumani", "Zangiota tumani",
+    "Angren shahri",
+    "Bekobod shahri",
+    "Chirchiq shahri",
+    "Nurafshon shahri",
+    "Olmaliq shahri",
+    "Ohangaron shahri",
+    "Yangiyoʻl shahri",
+    "Akkurgan tumani",
+    "Bekobod tumani",
+    "Boʻka tumani",
+    "Boʻstonliq tumani",
+    "Chinoz tumani",
+    "Oʻrtachirchiq tumani",
+    "Ohangaron tumani",
+    "Parkent tumani",
+    "Piskent tumani",
+    "Qibray tumani",
+    "Quyichirchiq tumani",
+    "Toshkent tumani",
+    "Yangiyo'l tumani",
+    "Yuqorichirchiq tumani",
+    "Zangiota tumani",
   ],
   "Jizzax viloyati": [
-    "Jizzax shahri", "Arnasoy tumani", "Baxmal tumani", "Do'stlik tumani",
-    "Forish tumani", "G'allaorol tumani", "Mirzacho'l tumani", "Paxtakor tumani",
-    "Sharof Rashidov tumani", "Yangiobod tumani", "Zomin tumani", "Zafarobod tumani",
+    "Jizzax shahri",
+    "Arnasoy tumani",
+    "Baxmal tumani",
+    "Do'stlik tumani",
+    "Forish tumani",
+    "G'allaorol tumani",
+    "Mirzacho'l tumani",
+    "Paxtakor tumani",
+    "Sharof Rashidov tumani",
+    "Yangiobod tumani",
+    "Zomin tumani",
+    "Zafarobod tumani",
   ],
   "Sirdaryo viloyati": [
-    "Guliston shahri", "Shirin shahri", "Yangiyer shahri", "Boyovut tumani",
-    "Guliston tumani", "Mirzaobod tumani", "Oqoltin tumani", "Sardoba tumani",
-    "Sayxunobod tumani", "Sirdaryo tumani", "Xovos tumani",
+    "Guliston shahri",
+    "Shirin shahri",
+    "Yangiyer shahri",
+    "Boyovut tumani",
+    "Guliston tumani",
+    "Mirzaobod tumani",
+    "Oqoltin tumani",
+    "Sardoba tumani",
+    "Sayxunobod tumani",
+    "Sirdaryo tumani",
+    "Xovos tumani",
   ],
   "Qoraqalpog'iston Respublikasi": [
-    "Nukus shahri", "Beruniy tumani", "Qonliko'l tumani", "Qorao'zak tumani",
-    "Kegeyli tumani", "Mo'ynoq tumani", "Nukus tumani", "Taxtako'pir tumani",
-    "To'rtko'l tumani", "Xo'jayli tumani", "Chimboy tumani", "Sho'manoy tumani",
-    "Ellikqal'a tumani", "Amudaryo tumani", "Bo'zatov tumani",
+    "Nukus shahri",
+    "Beruniy tumani",
+    "Qonliko'l tumani",
+    "Qorao'zak tumani",
+    "Kegeyli tumani",
+    "Mo'ynoq tumani",
+    "Nukus tumani",
+    "Taxtako'pir tumani",
+    "To'rtko'l tumani",
+    "Xo'jayli tumani",
+    "Chimboy tumani",
+    "Sho'manoy tumani",
+    "Ellikqal'a tumani",
+    "Amudaryo tumani",
+    "Bo'zatov tumani",
   ],
   "Xorazm viloyati": [
-    "Urganch shahri", "Xiva shahri", "Bog'ot tumani", "Gurlan tumani",
-    "Xonqa tumani", "Xazorasp tumani", "Qo'shko'pir tumani", "Shovot tumani",
-    "Urganch tumani", "Yangiariq tumani", "Yangibozor tumani",
+    "Urganch shahri",
+    "Xiva shahri",
+    "Bog'ot tumani",
+    "Gurlan tumani",
+    "Xonqa tumani",
+    "Xazorasp tumani",
+    "Qo'shko'pir tumani",
+    "Shovot tumani",
+    "Urganch tumani",
+    "Yangiariq tumani",
+    "Yangibozor tumani",
   ],
   "Buxoro viloyati": [
-    "Buxoro shahri", "Kogon shahri", "Buxoro tumani", "Vobkent tumani",
-    "G'ijduvon tumani", "Jondor tumani", "Kogon tumani", "Olot tumani",
-    "Peshku tumani", "Qorako'l tumani", "Qorovulbozor tumani", "Romitan tumani",
+    "Buxoro shahri",
+    "Kogon shahri",
+    "Buxoro tumani",
+    "Vobkent tumani",
+    "G'ijduvon tumani",
+    "Jondor tumani",
+    "Kogon tumani",
+    "Olot tumani",
+    "Peshku tumani",
+    "Qorako'l tumani",
+    "Qorovulbozor tumani",
+    "Romitan tumani",
     "Shofirkon tumani",
   ],
   "Samarqand viloyati": [
-    "Samarqand shahri", "Kattaqo'rg'on shahri", "Oqdaryo tumani", "Bulung'ur tumani",
-    "Jomboy tumani", "Ishtixon tumani", "Kattaqo'rg'on tumani", "Narpay tumani",
-    "Nurobod tumani", "Paxtachi tumani", "Payariq tumani", "Pastdarg'om tumani",
-    "Samarqand tumani", "Toyloq tumani", "Urgut tumani",
+    "Samarqand shahri",
+    "Kattaqo'rg'on shahri",
+    "Oqdaryo tumani",
+    "Bulung'ur tumani",
+    "Jomboy tumani",
+    "Ishtixon tumani",
+    "Kattaqo'rg'on tumani",
+    "Narpay tumani",
+    "Nurobod tumani",
+    "Paxtachi tumani",
+    "Payariq tumani",
+    "Pastdarg'om tumani",
+    "Samarqand tumani",
+    "Toyloq tumani",
+    "Urgut tumani",
   ],
   "Qashqadaryo viloyati": [
-    "Qarshi shahri", "Shahrisabz shahri", "Chiroqchi tumani", "Dehqonobod tumani",
-    "G'uzor tumani", "Kasbi tumani", "Kitob tumani", "Koson tumani",
-    "Mirishkor tumani", "Muborak tumani", "Nishon tumani", "Qamashi tumani",
-    "Qarshi tumani", "Shahrisabz tumani", "Yakkabog' tumani",
+    "Qarshi shahri",
+    "Shahrisabz shahri",
+    "Chiroqchi tumani",
+    "Dehqonobod tumani",
+    "G'uzor tumani",
+    "Kasbi tumani",
+    "Kitob tumani",
+    "Koson tumani",
+    "Mirishkor tumani",
+    "Muborak tumani",
+    "Nishon tumani",
+    "Qamashi tumani",
+    "Qarshi tumani",
+    "Shahrisabz tumani",
+    "Yakkabog' tumani",
   ],
   "Navoiy viloyati": [
-    "Navoiy shahri", "Zarafshon shahri", "Karmana tumani", "Konimex tumani",
-    "Xatirchi tumani", "Navbahor tumani", "Nurota tumani", "Tomdi tumani",
-    "Uchquduq tumani", "Qiziltepa tumani",
+    "Navoiy shahri",
+    "Zarafshon shahri",
+    "Karmana tumani",
+    "Konimex tumani",
+    "Xatirchi tumani",
+    "Navbahor tumani",
+    "Nurota tumani",
+    "Tomdi tumani",
+    "Uchquduq tumani",
+    "Qiziltepa tumani",
   ],
   "Surxondaryo viloyati": [
-    "Termiz shahri", "Angor tumani", "Boysun tumani", "Denov tumani",
-    "Jarqo'rg'on tumani", "Qiziriq tumani", "Qumqo'rg'on tumani", "Muzrobod tumani",
-    "Oltinsoy tumani", "Sariosiyo tumani", "Sherobod tumani", "Sho'rchi tumani",
-    "Termiz tumani", "Uzun tumani",
+    "Termiz shahri",
+    "Angor tumani",
+    "Boysun tumani",
+    "Denov tumani",
+    "Jarqo'rg'on tumani",
+    "Qiziriq tumani",
+    "Qumqo'rg'on tumani",
+    "Muzrobod tumani",
+    "Oltinsoy tumani",
+    "Sariosiyo tumani",
+    "Sherobod tumani",
+    "Sho'rchi tumani",
+    "Termiz tumani",
+    "Uzun tumani",
   ],
   "Fargʻona viloyati": [
-    "Farg'ona shahri", "Marg'ilon shahri", "Qo'qon shahri", "Beshariq tumani",
-    "Bog'dod tumani", "Buvayda tumani", "Dang'ara tumani", "Farg'ona tumani",
-    "Furqat tumani", "O'zbekiston tumani", "Oltiariq tumani", "Qo'shtepa tumani",
-    "Quva tumani", "Rishton tumani", "So'x tumani", "Toshloq tumani",
-    "Uchko'prik tumani", "Yozyovon tumani",
+    "Farg'ona shahri",
+    "Marg'ilon shahri",
+    "Qo'qon shahri",
+    "Beshariq tumani",
+    "Bog'dod tumani",
+    "Buvayda tumani",
+    "Dang'ara tumani",
+    "Farg'ona tumani",
+    "Furqat tumani",
+    "O'zbekiston tumani",
+    "Oltiariq tumani",
+    "Qo'shtepa tumani",
+    "Quva tumani",
+    "Rishton tumani",
+    "So'x tumani",
+    "Toshloq tumani",
+    "Uchko'prik tumani",
+    "Yozyovon tumani",
   ],
   "Andijon viloyati": [
-    "Andijon shahri", "Xonobod shahri", "Andijon tumani", "Asaka tumani",
-    "Baliqchi tumani", "Bo'z tumani", "Buloqboshi tumani", "Jalaquduq tumani",
-    "Izboskan tumani", "Qo'rg'ontepa tumani", "Marhamat tumani", "Oltinko'l tumani",
-    "Paxtaobod tumani", "Ulug'nor tumani", "Xo'jaobod tumani",
+    "Andijon shahri",
+    "Xonobod shahri",
+    "Andijon tumani",
+    "Asaka tumani",
+    "Baliqchi tumani",
+    "Bo'z tumani",
+    "Buloqboshi tumani",
+    "Jalaquduq tumani",
+    "Izboskan tumani",
+    "Qo'rg'ontepa tumani",
+    "Marhamat tumani",
+    "Oltinko'l tumani",
+    "Paxtaobod tumani",
+    "Ulug'nor tumani",
+    "Xo'jaobod tumani",
   ],
   "Namangan viloyati": [
-    "Namangan shahri", "Chortoq tumani", "Chust tumani", "Kosonsoy tumani",
-    "Mingbuloq tumani", "Namangan tumani", "Norin tumani", "Pop tumani",
-    "To'raqo'rg'on tumani", "Uchqo'rg'on tumani", "Uychi tumani", "Yangiqo'rg'on tumani",
+    "Namangan shahri",
+    "Chortoq tumani",
+    "Chust tumani",
+    "Kosonsoy tumani",
+    "Mingbuloq tumani",
+    "Namangan tumani",
+    "Norin tumani",
+    "Pop tumani",
+    "To'raqo'rg'on tumani",
+    "Uchqo'rg'on tumani",
+    "Uychi tumani",
+    "Yangiqo'rg'on tumani",
   ],
 };
 
@@ -258,21 +407,32 @@ const Criteria = () => {
     });
   }
 
-  const countOf = (k) => filtered.filter((t) => t.cat === k).length;
+  const countOf = (k) => {
+    if (k === 4) {
+      // Maxsus yutuqlari borlar
+      return filtered.filter((t) => t.hasSpecial).length;
+    }
+    return filtered.filter((t) => t.cat === k).length;
+  };
 
   const activeCat = CATS[tab];
-  const filteredByCategory = filtered
-    .filter((t) => t.cat === activeCat.key)
-    .sort((a, b) => b.tp - a.tp);
+  const filteredByCategory =
+    activeCat.key === 4
+      ? filtered.filter((t) => t.hasSpecial).sort((a, b) => b.tp - a.tp)
+      : filtered
+          .filter((t) => t.cat === activeCat.key)
+          .sort((a, b) => b.tp - a.tp);
 
   // Barcha filiallar (static list)
   const allFilials = ["Toshkent", "Nukus", "Fargʻona", "Samarqand"];
 
   // Barcha viloyatlar (static list)
-  const allProvinces = provinces.map(p => p.title).sort();
+  const allProvinces = provinces.map((p) => p.title).sort();
 
   // Tanlangan viloyatga tegishli tumanlar
-  const allDistricts = selectedProvince ? (DISTRICTS[selectedProvince] || []) : [];
+  const allDistricts = selectedProvince
+    ? DISTRICTS[selectedProvince] || []
+    : [];
 
   return (
     <Box>
@@ -287,7 +447,12 @@ const Criteria = () => {
         <>
           {/* Filter Section */}
           <Card sx={{ mb: 3, p: 2.5 }}>
-            <Stack direction={{ xs: "column", sm: "row" }} spacing={2} flexWrap="wrap" useFlexGap>
+            <Stack
+              direction={{ xs: "column", sm: "row" }}
+              spacing={2}
+              flexWrap="wrap"
+              useFlexGap
+            >
               {isSuperAdmin && (
                 <TextField
                   select
@@ -450,9 +615,18 @@ const Criteria = () => {
                         <TableCell sx={{ color: "text.secondary" }}>
                           {t.district || "—"}
                         </TableCell>
-                        <TableCell sx={{ color: "text.secondary", minWidth: 200, maxWidth: 350 }}>
+                        <TableCell
+                          sx={{
+                            color: "text.secondary",
+                            minWidth: 200,
+                            maxWidth: 350,
+                          }}
+                        >
                           {t.jobs && t.jobs.length > 0 ? (
-                            <Typography variant="body2" sx={{ lineHeight: 1.4 }}>
+                            <Typography
+                              variant="body2"
+                              sx={{ lineHeight: 1.4 }}
+                            >
                               {t.jobs[0].title}
                             </Typography>
                           ) : (
