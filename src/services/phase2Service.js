@@ -10,5 +10,5 @@ export const reviewSpecial = async (id, status, resultMessage) =>
 // Malaka oshirish
 export const getMalaka = async () => (await api.get("/malaka")).data.data;
 
-// Baholash mezoni uchun o'qituvchilar (totalPoints bilan)
+// Baholash mezoni uchun mutaxassislar (totalPoints bilan)
 export const getTeachers = async () => (await api.get("/teachers")).data;

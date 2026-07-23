@@ -153,7 +153,7 @@ const SuperAdminFilials = () => {
     <Box>
       <PageHeader
         title="Filiallar boshqaruvi"
-        subtitle="Har bir filialga admin tayinlang. O'qituvchilar viloyati bo'yicha o'z filial adminiga yo'naltiriladi."
+        subtitle="Har bir filialga admin tayinlang. Mutaxassislar viloyati bo'yicha o'z filial adminiga yo'naltiriladi."
         action={
           <Button
             variant="contained"
@@ -212,7 +212,7 @@ const SuperAdminFilials = () => {
                   sx={{ bgcolor: "grey.50", borderRadius: 2, mb: 2 }}
                 >
                   <Stat
-                    label="O'qituvchi"
+                    label="Mutaxassis"
                     value={f.teacherCount}
                     color="primary.main"
                     onClick={() =>

@@ -39,7 +39,7 @@ const Sidebar = ({ onNavigate }) => {
     ...(isSuper
       ? [{ to: "/filials", label: "Filiallar", icon: <ApartmentRoundedIcon /> }]
       : []),
-    { to: "/teachers", label: "O'qituvchilar", icon: <GroupsRoundedIcon /> },
+    { to: "/teachers", label: "Mutaxassislar", icon: <GroupsRoundedIcon /> },
     { to: "/new-files", label: "Yangi hujjatlar", icon: <InboxRoundedIcon /> },
     {
       to: "/approved",

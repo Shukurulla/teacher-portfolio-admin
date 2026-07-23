@@ -62,7 +62,7 @@ const Dashboard = () => {
       >
         <StatCard
           icon={<GroupsRoundedIcon />}
-          label="O'qituvchilar"
+          label="Mutaxassislar"
           value={teachers?.length || 0}
           color="#2563eb"
           loading={tLoading}
@@ -120,7 +120,7 @@ const Dashboard = () => {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>O'qituvchi</TableCell>
+                  <TableCell>Mutaxassis</TableCell>
                   <TableCell>Yutuq</TableCell>
                   <TableCell>Sana</TableCell>
                   <TableCell>Holat</TableCell>

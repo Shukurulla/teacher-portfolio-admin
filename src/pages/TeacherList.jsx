@@ -15,6 +15,7 @@ import {
   Avatar,
   Chip,
   TextField,
+  MenuItem,
   InputAdornment,
   IconButton,
   Tooltip,
@@ -24,12 +25,13 @@ import SearchRounded from "@mui/icons-material/SearchRounded";
 import VisibilityRounded from "@mui/icons-material/VisibilityRounded";
 import DeleteOutlineRounded from "@mui/icons-material/DeleteOutlineRounded";
 import GroupsRounded from "@mui/icons-material/GroupsRounded";
-import PersonRounded from "@mui/icons-material/PersonRounded";
+import LocationOnRounded from "@mui/icons-material/LocationOnRounded";
 import { fetchAllTeachers, removeTeacher } from "../store/slices/teacherSlice";
 import { toast } from "react-hot-toast";
 import { PageHeader, Loader, EmptyState, SoftChip } from "../components/ui";
 import { TeacherCell } from "../components";
 import { formatPhone } from "../utils/format";
+import { provinces, DISTRICTS } from "../utils/constants";
 
 const FILIAL_NAMES = {
   Nukus: "JTSBMQTMOI Nukus Filiali",
@@ -53,6 +55,10 @@ const TeacherList = () => {
   const dispatch = useDispatch();
   const { teachers, loading, error } = useSelector((state) => state.teachers);
   const [searchTerm, setSearchTerm] = useState("");
+  
+  const [selectedProvince, setSelectedProvince] = useState("");
+  const [selectedDistrict, setSelectedDistrict] = useState("");
+
   const [searchParams, setSearchParams] = useSearchParams();
   const filialParam = searchParams.get("filial");
 
@@ -61,15 +67,18 @@ const TeacherList = () => {
   }, [dispatch]);
 
   const handleDelete = (id) => {
-    if (window.confirm("Haqiqatan ham bu o'qituvchini o'chirmoqchimisiz?")) {
+    if (window.confirm("Haqiqatan ham bu mutaxassisni o'chirmoqchimisiz?")) {
       dispatch(removeTeacher(id))
         .unwrap()
-        .then(() => toast.success("O'qituvchi muvaffaqiyatli o'chirildi"))
+        .then(() => toast.success("Mutaxassis muvaffaqiyatli o'chirildi"))
         .catch((err) =>
-          toast.error(err || "O'qituvchini o'chirishda xatolik yuz berdi")
+          toast.error(err || "Mutaxassisni o'chirishda xatolik yuz berdi")
         );
     }
   };
+
+  const availableProvinces = provinces.filter(p => !filialParam || p.region === filialParam);
+  const availableDistricts = selectedProvince ? (DISTRICTS[selectedProvince] || []) : [];
 
   // Filtrlash + jami ball bo'yicha kamayish tartibida (reyting)
   const ranked = (teachers || [])
@@ -78,18 +87,23 @@ const TeacherList = () => {
       const matchesSearch = fullName.includes(searchTerm.toLowerCase());
       const matchesFilial =
         !filialParam || teacher.region?.region === filialParam;
-      return matchesSearch && matchesFilial;
+      
+      const teacherProvinceTitle = teacher.region?.title || "";
+      const matchesProvince = !selectedProvince || teacherProvinceTitle === selectedProvince;
+      const matchesDistrict = !selectedDistrict || teacher.district === selectedDistrict;
+
+      return matchesSearch && matchesFilial && matchesProvince && matchesDistrict;
     })
     .sort((a, b) => (b.totalPoints || 0) - (a.totalPoints || 0));
 
   return (
     <Box>
       <PageHeader
-        title="O'qituvchilar reytingi"
-        subtitle="To'plagan bali bo'yicha tartiblangan o'qituvchilar ro'yxati"
+        title="Mutaxassislar reytingi"
+        subtitle="To'plagan bali bo'yicha tartiblangan mutaxassislar ro'yxati"
         action={
           !loading && (
-            <SoftChip label={`${ranked.length} ta o'qituvchi`} color="#2563eb" />
+            <SoftChip label={`${ranked.length} ta mutaxassis`} color="#2563eb" />
           )
         }
       />
@@ -97,17 +111,18 @@ const TeacherList = () => {
       <Card>
         <Stack
           direction={{ xs: "column", sm: "row" }}
-          justifyContent="space-between"
+          justifyContent="flex-start"
           alignItems={{ xs: "stretch", sm: "center" }}
           gap={2}
+          flexWrap="wrap"
           sx={{ px: 3, py: 2, borderBottom: "1px solid", borderColor: "divider" }}
         >
           <TextField
             size="small"
-            placeholder="O'qituvchi qidirish..."
+            placeholder="Mutaxassis qidirish..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            sx={{ width: { xs: "100%", sm: 340 } }}
+            sx={{ width: { xs: "100%", sm: 260 } }}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -116,6 +131,39 @@ const TeacherList = () => {
               ),
             }}
           />
+
+          <TextField
+            select
+            size="small"
+            label="Viloyat"
+            value={selectedProvince}
+            onChange={(e) => {
+              setSelectedProvince(e.target.value);
+              setSelectedDistrict(""); // reset district
+            }}
+            sx={{ minWidth: 200 }}
+          >
+            <MenuItem value="">Barchasi</MenuItem>
+            {availableProvinces.map((p, i) => (
+              <MenuItem key={i} value={p.title}>{p.title}</MenuItem>
+            ))}
+          </TextField>
+
+          <TextField
+            select
+            size="small"
+            label="Tuman"
+            value={selectedDistrict}
+            onChange={(e) => setSelectedDistrict(e.target.value)}
+            disabled={!selectedProvince || availableDistricts.length === 0}
+            sx={{ minWidth: 200 }}
+          >
+            <MenuItem value="">Barchasi</MenuItem>
+            {availableDistricts.map((d, i) => (
+              <MenuItem key={i} value={d}>{d}</MenuItem>
+            ))}
+          </TextField>
+
           {filialParam && (
             <Chip
               label={FILIAL_NAMES[filialParam] || filialParam}
@@ -124,6 +172,7 @@ const TeacherList = () => {
                 bgcolor: alpha("#2563eb", 0.12),
                 color: "#2563eb",
                 fontWeight: 600,
+                ml: { sm: "auto" },
                 "& .MuiChip-deleteIcon": {
                   color: "#2563eb",
                   "&:hover": { color: "#1d4ed8" },
@@ -134,7 +183,7 @@ const TeacherList = () => {
         </Stack>
 
         {loading ? (
-          <Loader label="O'qituvchilar yuklanmoqda..." />
+          <Loader label="Mutaxassislar yuklanmoqda..." />
         ) : error ? (
           <Box sx={{ p: 6, textAlign: "center", color: "error.main" }}>
             <Typography variant="body2">{error}</Typography>
@@ -142,8 +191,8 @@ const TeacherList = () => {
         ) : ranked.length === 0 ? (
           <EmptyState
             icon={<GroupsRounded />}
-            title="O'qituvchilar topilmadi"
-            description="Qidiruv yoki filtr shartlariga mos o'qituvchi mavjud emas"
+            title="Mutaxassislar topilmadi"
+            description="Qidiruv yoki filtr shartlariga mos mutaxassis mavjud emas"
           />
         ) : (
           <Box sx={{ overflowX: "auto" }}>
@@ -153,7 +202,7 @@ const TeacherList = () => {
                   <TableCell sx={{ width: 64 }} align="center">
                     O'rin
                   </TableCell>
-                  <TableCell>O'qituvchi</TableCell>
+                  <TableCell>Mutaxassis</TableCell>
                   <TableCell>Telefon</TableCell>
                   <TableCell align="center">Ish joylari</TableCell>
                   <TableCell align="center">Yutuqlar</TableCell>

@@ -64,7 +64,7 @@ const MalakaList = () => {
     <Box>
       <PageHeader
         title="Malaka oshirish jadvali"
-        subtitle="O'qituvchilar qachon va qaysi filialga malaka oshirishga borishi"
+        subtitle="Mutaxassislar qachon va qaysi filialga malaka oshirishga borishi"
         action={<SoftChip label={`${list.length} ta yozuv`} color="#2563eb" />}
       />
 
@@ -82,7 +82,7 @@ const MalakaList = () => {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>O'qituvchi</TableCell>
+                  <TableCell>Mutaxassis</TableCell>
                   <TableCell>Sana</TableCell>
                   <TableCell>Filial</TableCell>
                   <TableCell>Viloyat</TableCell>

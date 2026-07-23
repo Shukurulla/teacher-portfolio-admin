@@ -102,7 +102,7 @@ const TeacherDetail = () => {
         {backButton}
         <Alert severity="warning" variant="outlined">
           <AlertTitle>Diqqat</AlertTitle>
-          O'qituvchi topilmadi.
+          Mutaxassis topilmadi.
         </Alert>
       </Box>
     );
@@ -113,7 +113,7 @@ const TeacherDetail = () => {
       {backButton}
       <PageHeader
         title={`${currentTeacher.firstName} ${currentTeacher.lastName}`}
-        subtitle="O'qituvchi ma'lumotlari"
+        subtitle="Mutaxassis ma'lumotlari"
       />
 
       {/* Profil sarlavhasi */}
@@ -257,7 +257,7 @@ const TeacherDetail = () => {
           <EmptyState
             icon={<CalendarMonthRounded />}
             title="Malaka rejasi yo'q"
-            description="Bu o'qituvchi hali malaka oshirish sanasini kiritmagan"
+            description="Bu mutaxassis hali malaka oshirish sanasini kiritmagan"
           />
         )}
       </Card>
@@ -279,7 +279,7 @@ const TeacherDetail = () => {
           <EmptyState
             icon={<WorkRounded />}
             title="Ish joylari mavjud emas"
-            description="Bu o'qituvchi uchun ish joylari qo'shilmagan"
+            description="Bu mutaxassis uchun ish joylari qo'shilmagan"
           />
         ) : (
           <Box

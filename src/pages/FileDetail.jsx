@@ -248,7 +248,7 @@ const FileDetail = () => {
                     color="text.secondary"
                     sx={{ fontWeight: 600, display: "block", mb: 0.75 }}
                   >
-                    O'qituvchi
+                    Mutaxassis
                   </Typography>
                   <TeacherCell
                     id={currentFile.from?.id}

@@ -86,7 +86,7 @@ const SpecialReview = () => {
     <Box>
       <PageHeader
         title="Maxsus yutuqlar (19-band)"
-        subtitle="O'qituvchilar yuborgan maxsus yutuq hujjatlarini tasdiqlang"
+        subtitle="Mutaxassislar yuborgan maxsus yutuq hujjatlarini tasdiqlang"
         action={<SoftChip label={`${pending} ta yangi`} color="#d97706" />}
         style={{ marginBottom: "20px" }}
       />
@@ -105,7 +105,7 @@ const SpecialReview = () => {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>O'qituvchi</TableCell>
+                  <TableCell>Mutaxassis</TableCell>
                   <TableCell>Maxsus yutuq</TableCell>
                   <TableCell>Sana</TableCell>
                   <TableCell>Holat</TableCell>
@@ -167,7 +167,7 @@ const SpecialReview = () => {
                     color="text.secondary"
                     sx={{ display: "block", mb: 0.5 }}
                   >
-                    O'qituvchi
+                    Mutaxassis
                   </Typography>
                   <TeacherCell
                     id={dialog.from?.id}

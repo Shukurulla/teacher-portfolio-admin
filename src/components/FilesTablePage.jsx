@@ -80,7 +80,7 @@ const FilesTablePage = ({ title, subtitle, emptyTitle, fetcher }) => {
         <Box sx={{ px: 3, py: 2, borderBottom: "1px solid", borderColor: "divider" }}>
           <TextField
             size="small"
-            placeholder="O'qituvchi bo'yicha qidirish"
+            placeholder="Mutaxassis bo'yicha qidirish"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             sx={{ width: { xs: "100%", sm: 320 } }}
@@ -110,7 +110,7 @@ const FilesTablePage = ({ title, subtitle, emptyTitle, fetcher }) => {
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell>O'qituvchi</TableCell>
+                    <TableCell>Mutaxassis</TableCell>
                     <TableCell>Yutuq</TableCell>
                     <TableCell>Sana</TableCell>
                     <TableCell>Holat</TableCell>

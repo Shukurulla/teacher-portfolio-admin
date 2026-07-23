@@ -1,7 +1,7 @@
 import api from "../api/api";
 import { toast } from "react-hot-toast";
 
-// Barcha o'qituvchilarni olish
+// Barcha mutaxassislarni olish
 export const getAllTeachers = async () => {
   try {
     const response = await api.get("/teachers");

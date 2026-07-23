@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "https://server.portfolio-sport.uz"; // Asosiy API URL
+const API_URL = "http://localhost:7474"; // Asosiy API URL
 
 const api = axios.create({
   baseURL: API_URL,
