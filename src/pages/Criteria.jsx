@@ -74,11 +74,11 @@ const CATS = [
 ];
 
 const categoryOf = (tp, hasSpecial) => {
-  // 1. Muqobil shakl: faqat 85+ ball
-  if (tp >= 85) return 1;
-  // 2. Attestatsiyadan ozod: 56+ ball yoki maxsus yutuq
-  if (tp >= 56 || hasSpecial) return 2;
-  // 3. Yetarli emas: 0-55 ball (va maxsus yutuqi yo'q)
+  // 1. Muqobil shakl: 85+ ball YOKI maxsus yutuq
+  if (tp >= 85 || hasSpecial) return 1;
+  // 2. Attestatsiyadan ozod: 56-84 ball
+  if (tp >= 56 && tp < 85) return 2;
+  // 3. Yetarli emas: 0-55 ball
   if (tp >= 0 && tp < 56) return 3;
   return 3;
 };
@@ -410,13 +410,10 @@ const Criteria = () => {
 
   const countOf = (k) => {
     if (k === 4) {
-      // Maxsus yutuqlari borlar
+      // Maxsus yutuqlari borlar (alohida ko'rish uchun)
       return filtered.filter((t) => t.hasSpecial).length;
     }
-    if (k === 2) {
-      // Attestatsiyadan ozod: 56+ ball yoki maxsus yutuq
-      return filtered.filter((t) => t.cat === 2 || t.hasSpecial).length;
-    }
+    // Boshqa kategoriyalar o'z cat qiymati bo'yicha
     return filtered.filter((t) => t.cat === k).length;
   };
 
@@ -424,8 +421,6 @@ const Criteria = () => {
   const filteredByCategory =
     activeCat.key === 4
       ? filtered.filter((t) => t.hasSpecial).sort((a, b) => b.tp - a.tp)
-      : activeCat.key === 2
-      ? filtered.filter((t) => t.cat === 2 || t.hasSpecial).sort((a, b) => b.tp - a.tp)
       : filtered
           .filter((t) => t.cat === activeCat.key)
           .sort((a, b) => b.tp - a.tp);
