@@ -74,11 +74,12 @@ const CATS = [
 ];
 
 const categoryOf = (tp, hasSpecial) => {
-  // 1. Muqobil shakl: 85+ ball YOKI maxsus yutuq
-  if (tp >= 85 || hasSpecial) return 1;
-  // 2. Attestatsiyadan ozod: 56-84 ball
+  // 1. Muqobil shakl: faqat 85+ ball
+  if (tp >= 85) return 1;
+  // 2. Attestatsiyadan ozod: 56-84 ball YOKI maxsus yutuq
   if (tp >= 56 && tp < 85) return 2;
-  // 3. Yetarli emas: 0-55 ball
+  if (hasSpecial) return 2; // maxsus yutuq borlar ham attestatsiyadan ozod
+  // 3. Yetarli emas: 0-55 ball (va maxsus yutuqi yo'q)
   if (tp >= 0 && tp < 56) return 3;
   return 3;
 };
@@ -410,7 +411,7 @@ const Criteria = () => {
 
   const countOf = (k) => {
     if (k === 1) {
-      // Muqobil shakl: 85+ ball YOKI maxsus yutuq
+      // Muqobil shakl: faqat 85+ ball
       return filtered.filter((t) => t.cat === 1).length;
     }
     if (k === 4) {
@@ -421,7 +422,10 @@ const Criteria = () => {
       // Attestatsiyadan ozod: 56-84 ball YOKI maxsus yutuq
       return filtered.filter((t) => t.cat === 2 || t.hasSpecial).length;
     }
-    // Yetarli emas: 0-55 ball (maxsus yutuqsiz)
+    if (k === 3) {
+      // Yetarli emas: 0-55 ball (maxsus yutuqsiz)
+      return filtered.filter((t) => t.cat === 3).length;
+    }
     return filtered.filter((t) => t.cat === k).length;
   };
 
