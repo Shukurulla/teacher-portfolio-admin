@@ -43,23 +43,15 @@ const CATS = [
     key: 1,
     label: "Muqobil malaka oshirish shakliga o'tganlar",
     short: "Muqobil shakl",
-    desc: "85 va undan yuqori ball yoki maxsus yutuq",
+    desc: "85 va undan yuqori ball",
     color: "#16a34a",
     icon: <CheckCircleRoundedIcon />,
-  },
-  {
-    key: 4,
-    label: "Maxsus yutuqlari borlar",
-    short: "Maxsus yutuqlar",
-    desc: "Maxsus yutuqi tasdiqlangan",
-    color: "#7c3aed",
-    icon: <WorkspacePremiumRoundedIcon />,
   },
   {
     key: 2,
     label: "Yakuniy attestatsiyadan ozod qilinganlar",
     short: "Attestatsiyadan ozod",
-    desc: "56 dan 84 ballgacha",
+    desc: "56 va undan yuqori ball",
     color: "#2563eb",
     icon: <VerifiedRoundedIcon />,
   },
@@ -71,14 +63,22 @@ const CATS = [
     color: "#dc2626",
     icon: <ReportProblemRoundedIcon />,
   },
+  {
+    key: 4,
+    label: "Maxsus yutuqlari borlar",
+    short: "Maxsus yutuqlar",
+    desc: "Maxsus yutuqi tasdiqlangan",
+    color: "#7c3aed",
+    icon: <WorkspacePremiumRoundedIcon />,
+  },
 ];
 
 const categoryOf = (tp, hasSpecial) => {
-  // 1. Muqobil shakl: 85+ ball yoki maxsus yutuq
-  if (tp >= 85 || hasSpecial) return 1;
-  // 2. Attestatsiyadan ozod: 56-84 ball (85 dan kam)
-  if (tp >= 56 && tp < 85) return 2;
-  // 3. Yetarli emas: 0-55 ball (56 dan kam)
+  // 1. Muqobil shakl: faqat 85+ ball
+  if (tp >= 85) return 1;
+  // 2. Attestatsiyadan ozod: 56+ ball yoki maxsus yutuq
+  if (tp >= 56 || hasSpecial) return 2;
+  // 3. Yetarli emas: 0-55 ball (va maxsus yutuqi yo'q)
   if (tp >= 0 && tp < 56) return 3;
   return 3;
 };
@@ -413,6 +413,10 @@ const Criteria = () => {
       // Maxsus yutuqlari borlar
       return filtered.filter((t) => t.hasSpecial).length;
     }
+    if (k === 2) {
+      // Attestatsiyadan ozod: 56+ ball yoki maxsus yutuq
+      return filtered.filter((t) => t.cat === 2 || t.hasSpecial).length;
+    }
     return filtered.filter((t) => t.cat === k).length;
   };
 
@@ -420,6 +424,8 @@ const Criteria = () => {
   const filteredByCategory =
     activeCat.key === 4
       ? filtered.filter((t) => t.hasSpecial).sort((a, b) => b.tp - a.tp)
+      : activeCat.key === 2
+      ? filtered.filter((t) => t.cat === 2 || t.hasSpecial).sort((a, b) => b.tp - a.tp)
       : filtered
           .filter((t) => t.cat === activeCat.key)
           .sort((a, b) => b.tp - a.tp);
