@@ -22,7 +22,7 @@ const colorFromName = (s = "") => {
 const DEFAULT_IMG =
   "https://as2.ftcdn.net/jpg/05/89/93/27/1000_F_589932782_vQAEAZhHnq1QCGu5ikwrYaQD0Mmurm0N.jpg";
 
-// O'qituvchi identifikatori: rasm (yoki bosh harflar) + ism-familiya (+ telefon).
+// Mutaxassis identifikatori: rasm (yoki bosh harflar) + ism-familiya (+ telefon).
 // id berilsa — bosilганda /teachers/:id profiliga o'tadi.
 const TeacherCell = ({
   id,
@@ -40,7 +40,12 @@ const TeacherCell = ({
   const realImage = image && image !== DEFAULT_IMG ? image : undefined;
 
   const content = (
-    <Stack direction="row" alignItems="center" spacing={1.5} sx={{ minWidth: 0 }}>
+    <Stack
+      direction="row"
+      alignItems="center"
+      spacing={1.5}
+      sx={{ minWidth: 0 }}
+    >
       <Avatar
         src={realImage}
         sx={{

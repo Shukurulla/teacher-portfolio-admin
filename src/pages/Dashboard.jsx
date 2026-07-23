@@ -21,7 +21,13 @@ import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
 import InboxRoundedIcon from "@mui/icons-material/InboxRounded";
 import { fetchAllTeachers } from "../store/slices/teacherSlice";
 import { fetchAllFiles } from "../store/slices/fileSlice";
-import { PageHeader, StatCard, StatusChip, Loader, EmptyState } from "../components/ui";
+import {
+  PageHeader,
+  StatCard,
+  StatusChip,
+  Loader,
+  EmptyState,
+} from "../components/ui";
 import { TeacherCell } from "../components";
 import { formatDate } from "../utils/format";
 
@@ -55,7 +61,11 @@ const Dashboard = () => {
       <Box
         sx={{
           display: "grid",
-          gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr", lg: "repeat(4,1fr)" },
+          gridTemplateColumns: {
+            xs: "1fr",
+            sm: "1fr 1fr",
+            lg: "repeat(4,1fr)",
+          },
           gap: 2.5,
           mb: 3,
         }}
@@ -78,7 +88,7 @@ const Dashboard = () => {
         />
         <StatCard
           icon={<CheckCircleRoundedIcon />}
-          label="Tasdiqlangan"
+          label="Tasdiqlangan hujjatlar"
           value={approved}
           color="#16a34a"
           loading={fLoading}
@@ -86,7 +96,7 @@ const Dashboard = () => {
         />
         <StatCard
           icon={<CancelRoundedIcon />}
-          label="Rad etilgan"
+          label="Rad qilingan hujjatlar"
           value={rejected}
           color="#dc2626"
           loading={fLoading}
@@ -99,7 +109,12 @@ const Dashboard = () => {
           direction="row"
           justifyContent="space-between"
           alignItems="center"
-          sx={{ px: 3, py: 2, borderBottom: "1px solid", borderColor: "divider" }}
+          sx={{
+            px: 3,
+            py: 2,
+            borderBottom: "1px solid",
+            borderColor: "divider",
+          }}
         >
           <Typography variant="h6">So'nggi hujjatlar</Typography>
           <Button size="small" onClick={() => navigate("/new-files")}>
@@ -151,7 +166,9 @@ const Dashboard = () => {
                         {file.achievments?.section}
                       </Typography>
                     </TableCell>
-                    <TableCell sx={{ color: "text.secondary", whiteSpace: "nowrap" }}>
+                    <TableCell
+                      sx={{ color: "text.secondary", whiteSpace: "nowrap" }}
+                    >
                       {formatDate(file.createdAt)}
                     </TableCell>
                     <TableCell>

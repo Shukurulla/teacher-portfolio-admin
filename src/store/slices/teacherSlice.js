@@ -16,10 +16,10 @@ export const fetchAllTeachers = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(
         error.response?.data?.message ||
-          "O'qituvchilar ro'yxatini olishda xatolik"
+          "Mutaxassislar ro'yxatini olishda xatolik",
       );
     }
-  }
+  },
 );
 
 export const fetchTeacherById = createAsyncThunk(
@@ -30,10 +30,10 @@ export const fetchTeacherById = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(
         error.response?.data?.message ||
-          "O'qituvchi ma'lumotlarini olishda xatolik"
+          "Mutaxassis ma'lumotlarini olishda xatolik",
       );
     }
-  }
+  },
 );
 
 export const fetchTeacherJobs = createAsyncThunk(
@@ -44,10 +44,10 @@ export const fetchTeacherJobs = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(
         error.response?.data?.message ||
-          "O'qituvchi ish joylarini olishda xatolik"
+          "Mutaxassis ish joylarini olishda xatolik",
       );
     }
-  }
+  },
 );
 
 export const fetchTeacherAchievements = createAsyncThunk(
@@ -58,10 +58,10 @@ export const fetchTeacherAchievements = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(
         error.response?.data?.message ||
-          "O'qituvchi yutuqlarini olishda xatolik"
+          "Mutaxassis yutuqlarini olishda xatolik",
       );
     }
-  }
+  },
 );
 
 export const removeTeacher = createAsyncThunk(
@@ -71,10 +71,10 @@ export const removeTeacher = createAsyncThunk(
       return await deleteTeacher(id);
     } catch (error) {
       return rejectWithValue(
-        error.response?.data?.message || "O'qituvchini o'chirishda xatolik"
+        error.response?.data?.message || "Mutaxassisni o'chirishda xatolik",
       );
     }
-  }
+  },
 );
 
 // Initial state
@@ -164,7 +164,7 @@ const teacherSlice = createSlice({
       .addCase(removeTeacher.fulfilled, (state, action) => {
         state.loading = false;
         state.teachers = state.teachers.filter(
-          (teacher) => teacher._id !== action.meta.arg
+          (teacher) => teacher._id !== action.meta.arg,
         );
       })
       .addCase(removeTeacher.rejected, (state, action) => {
