@@ -43,12 +43,12 @@ const CATS = [
     key: 1,
     label: "Muqobil malaka oshirish shakliga o'tganlar",
     short: "Muqobil shakl",
-    desc: "85+ ball yoki maxsus yutug'i bor",
+    desc: "85 va undan yuqori ball yoki maxsus yutuq",
     color: "#16a34a",
     icon: <CheckCircleRoundedIcon />,
   },
   {
-    key: 2,
+    key: 4,
     label: "Maxsus yutuqlari borlar",
     short: "Maxsus yutuqlar",
     desc: "Maxsus yutuqi tasdiqlangan",
@@ -56,18 +56,18 @@ const CATS = [
     icon: <WorkspacePremiumRoundedIcon />,
   },
   {
-    key: 3,
+    key: 2,
     label: "Yakuniy attestatsiyadan ozod qilinganlar",
     short: "Attestatsiyadan ozod",
-    desc: "56 – 84 ball",
+    desc: "56 dan 84 ballgacha",
     color: "#2563eb",
     icon: <VerifiedRoundedIcon />,
   },
   {
-    key: 4,
+    key: 3,
     label: "Yetarli ball to'play olmaganlar",
     short: "Yetarli emas",
-    desc: "56 balldan kam",
+    desc: "0 dan 55 ballgacha",
     color: "#dc2626",
     icon: <ReportProblemRoundedIcon />,
   },
@@ -76,9 +76,10 @@ const CATS = [
 const categoryOf = (tp, hasSpecial) => {
   // 1. Muqobil shakl: 85+ ball yoki maxsus yutuq
   if (tp >= 85 || hasSpecial) return 1;
-  // 2. Attestatsiyadan ozod: 56-84 ball
+  // 2. Attestatsiyadan ozod: 56-84 ball (85 dan kam)
   if (tp >= 56 && tp < 85) return 2;
-  // 3. Yetarli emas: 56 balldan kam
+  // 3. Yetarli emas: 0-55 ball (56 dan kam)
+  if (tp >= 0 && tp < 56) return 3;
   return 3;
 };
 
