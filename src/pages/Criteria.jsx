@@ -48,6 +48,14 @@ const CATS = [
     icon: <CheckCircleRoundedIcon />,
   },
   {
+    key: 4,
+    label: "Maxsus yutuqlari borlar",
+    short: "Maxsus yutuqlar",
+    desc: "Maxsus yutuqi tasdiqlangan",
+    color: "#7c3aed",
+    icon: <WorkspacePremiumRoundedIcon />,
+  },
+  {
     key: 2,
     label: "Yakuniy attestatsiyadan ozod qilinganlar",
     short: "Attestatsiyadan ozod",
@@ -62,14 +70,6 @@ const CATS = [
     desc: "0 dan 55 ballgacha",
     color: "#dc2626",
     icon: <ReportProblemRoundedIcon />,
-  },
-  {
-    key: 4,
-    label: "Maxsus yutuqlari borlar",
-    short: "Maxsus yutuqlar",
-    desc: "Maxsus yutuqi tasdiqlangan",
-    color: "#7c3aed",
-    icon: <WorkspacePremiumRoundedIcon />,
   },
 ];
 
