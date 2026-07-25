@@ -29,7 +29,7 @@ import {
   SoftChip,
 } from "../components/ui";
 import { TeacherCell } from "../components";
-import { formatDate } from "../utils/format";
+import { formatDate, normalizeName } from "../utils/format";
 
 const FILIAL_NAMES = {
   Nukus: "Nukus Filiali",
@@ -51,7 +51,7 @@ const CATS = [
     key: 4,
     label: "Maxsus yutuqlari borlar",
     short: "Maxsus yutuqlar",
-    desc: "Maxsus yutuqi tasdiqlangan",
+    desc: "Maxsus yutuqi tasdiqlangan (balldan qat'i nazar)",
     color: "#7c3aed",
     icon: <WorkspacePremiumRoundedIcon />,
   },
@@ -59,7 +59,7 @@ const CATS = [
     key: 2,
     label: "Yakuniy attestatsiyadan ozod qilinganlar",
     short: "Attestatsiyadan ozod",
-    desc: "56 va undan yuqori ball",
+    desc: "56 dan 84 ballgacha",
     color: "#2563eb",
     icon: <VerifiedRoundedIcon />,
   },
@@ -73,27 +73,28 @@ const CATS = [
   },
 ];
 
+// Har bir mutaxassis FAQAT bitta toifaga tushadi.
 const categoryOf = (tp, hasSpecial) => {
-  // 1. Muqobil shakl: faqat 85+ ball
+  // 4. Maxsus yutuq — alohida toifa (boshqa toifalarda ko'rinmaydi)
+  if (hasSpecial) return 4;
+  // 1. Muqobil shakl: 85+ ball
   if (tp >= 85) return 1;
-  // 2. Attestatsiyadan ozod: 56-84 ball YOKI maxsus yutuq
-  if (tp >= 56 && tp < 85) return 2;
-  if (hasSpecial) return 2; // maxsus yutuq borlar ham attestatsiyadan ozod
-  // 3. Yetarli emas: 0-55 ball (va maxsus yutuqi yo'q)
-  if (tp >= 0 && tp < 56) return 3;
+  // 2. Attestatsiyadan ozod: 56-84 ball
+  if (tp >= 56) return 2;
+  // 3. Yetarli emas: 0-55 ball
   return 3;
 };
 
 const directions = [
-  "I.Sport taʼlim muassasalari rahbar va oʻrinbosarlari",
-  "II. Sport taʼlim muassasalari yoʻriqchi-uslubchilari  ",
+  "I. Sport taʼlim muassasalari rahbar va oʻrinbosarlari",
+  "II. Sport taʼlim muassasalari yoʻriqchi-uslubchilari",
   "III. Sport turlarini rivojlantirish respublika markazlari, Olimpiya va paralimpiya sport turlariga tayyorlash markazlari, ixtisoslashtirilgan sport maktablari, ixtisoslashtirilgan olimpiya zaxiralari maktablari trenerlari",
   "IV. Sport maktablari trenerlari",
   "V. Sport psixologlari",
   "VI. Oliy taʼlim muassasalarining jismoniy tarbiya va sport yoʻnalishlari boʻyicha rahbar va pedagog kadrlari",
-  "VII. Kasbiy taʼlim tashkilotlari jismoniy tarbiya fani oʻqituvchilari(jismoniy tarbiya va sportga ixtisoslashtirilganlar bundan mustasno)",
+  "VII. Kasbiy taʼlim tashkilotlari jismoniy tarbiya fani oʻqituvchilari (jismoniy tarbiya va sportga ixtisoslashtirilganlar bundan mustasno)",
   "VIII. Umumiy oʻrta va oʻrta maxsus taʼlim tashkilotlari jismoniy tarbiya fani oʻqituvchilari",
-  "IX. Maktabgacha taʼlim tashkilotlari jismoniy tarbiya yuriqchilari",
+  "IX. Maktabgacha taʼlim tashkilotlari jismoniy tarbiya yoʻriqchilari",
 ];
 
 // O'zbekiston viloyatlari
@@ -404,40 +405,20 @@ const Criteria = () => {
   // Lavozim bo'yicha filterlash
   if (selectedDirection) {
     filtered = filtered.filter((t) => {
-      // teacher'ning job'lari ichida selectedDirection bor yoki yo'qligini tekshirish
-      return t.jobs?.some((job) => job.title === selectedDirection);
+      // Ish joyi nomi rim raqamli ("IV. ...") yoki raqamsiz saqlangan bo'lishi
+      // mumkin — shuning uchun normalizatsiya bilan solishtiramiz.
+      const target = normalizeName(selectedDirection);
+      return t.jobs?.some((job) => normalizeName(job.title) === target);
     });
   }
 
-  const countOf = (k) => {
-    if (k === 1) {
-      // Muqobil shakl: faqat 85+ ball
-      return filtered.filter((t) => t.cat === 1).length;
-    }
-    if (k === 4) {
-      // Maxsus yutuqlari borlar (alohida ko'rish uchun)
-      return filtered.filter((t) => t.hasSpecial).length;
-    }
-    if (k === 2) {
-      // Attestatsiyadan ozod: 56-84 ball YOKI maxsus yutuq
-      return filtered.filter((t) => t.cat === 2 || t.hasSpecial).length;
-    }
-    if (k === 3) {
-      // Yetarli emas: 0-55 ball (maxsus yutuqsiz)
-      return filtered.filter((t) => t.cat === 3).length;
-    }
-    return filtered.filter((t) => t.cat === k).length;
-  };
+  // Toifalar o'zaro kesishmaydi — har kim faqat bitta toifada.
+  const countOf = (k) => filtered.filter((t) => t.cat === k).length;
 
   const activeCat = CATS[tab];
-  const filteredByCategory =
-    activeCat.key === 4
-      ? filtered.filter((t) => t.hasSpecial).sort((a, b) => b.tp - a.tp)
-      : activeCat.key === 2
-      ? filtered.filter((t) => t.cat === 2 || t.hasSpecial).sort((a, b) => b.tp - a.tp)
-      : filtered
-          .filter((t) => t.cat === activeCat.key)
-          .sort((a, b) => b.tp - a.tp);
+  const filteredByCategory = filtered
+    .filter((t) => t.cat === activeCat.key)
+    .sort((a, b) => b.tp - a.tp);
 
   // Barcha filiallar (static list)
   const allFilials = ["Toshkent", "Nukus", "Fargʻona", "Samarqand"];

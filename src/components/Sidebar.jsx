@@ -21,6 +21,7 @@ import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import SchoolRoundedIcon from "@mui/icons-material/SchoolRounded";
 import WorkspacePremiumRoundedIcon from "@mui/icons-material/WorkspacePremiumRounded";
 import AssessmentRoundedIcon from "@mui/icons-material/AssessmentRounded";
+import BarChartRoundedIcon from "@mui/icons-material/BarChartRounded";
 import { logout } from "../store/slices/authSlice";
 
 const Sidebar = ({ onNavigate }) => {
@@ -57,6 +58,11 @@ const Sidebar = ({ onNavigate }) => {
       to: "/criteria",
       label: "Baholash natijalari",
       icon: <AssessmentRoundedIcon />,
+    },
+    {
+      to: "/statistics",
+      label: "Statistika",
+      icon: <BarChartRoundedIcon />,
     },
   ];
 

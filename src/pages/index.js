@@ -12,3 +12,4 @@ export { default as SuperAdminFilials } from "./SuperAdminFilials";
 export { default as SpecialReview } from "./SpecialReview";
 export { default as MalakaList } from "./MalakaList";
 export { default as Criteria } from "./Criteria";
+export { default as Statistics } from "./Statistics";

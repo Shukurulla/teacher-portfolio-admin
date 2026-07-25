@@ -19,3 +19,12 @@ export const formatPhone = (phone) => {
     9
   )}`;
 };
+
+// Lavozim/bo'lim nomlarini solishtirish uchun: bosh rim raqamni va
+// belgilarni tashlab, sodda ko'rinishga keltiradi.
+// "IV. Sport maktablari trenerlari" == "Sport maktablari trenerlari"
+export const normalizeName = (text) =>
+  String(text || "")
+    .replace(/^\s*[IVX]+\s*\.?\s*/i, "")
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}]+/gu, "");

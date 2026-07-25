@@ -20,6 +20,7 @@ import {
   SpecialReview,
   MalakaList,
   Criteria,
+  Statistics,
 } from "./pages";
 import { ProtectedRoute } from "./components";
 
@@ -56,6 +57,7 @@ function App() {
             <Route path="/special-review" element={<SpecialReview />} />
             <Route path="/malaka" element={<MalakaList />} />
             <Route path="/criteria" element={<Criteria />} />
+            <Route path="/statistics" element={<Statistics />} />
           </Route>
 
           <Route path="*" element={<NotFound />} />
